@@ -102,10 +102,10 @@ h1, h2, h3, h4, h5, h6 {
 [data-theme="light"] ::-webkit-scrollbar-track { background: #ede8e2; }
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
 
-/* Sidebar nav scrollbar */
+/* Sidebar nav — thin orange scrollbar matching brand #F58220 */
+.sidebar-nav { scrollbar-width: thin; scrollbar-color: #F58220 rgba(255,255,255,0.05); }
 .sidebar-nav::-webkit-scrollbar { width: 4px; }
 .sidebar-nav::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 99px; }
-.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(242,125,38,0.6); border-radius: 99px; }
-.sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(242,125,38,1); }
-.sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(242,125,38,0.6) rgba(255,255,255,0.05); }
+.sidebar-nav::-webkit-scrollbar-thumb { background: #F58220; border-radius: 99px; opacity: 0.8; }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: #ff9535; }
 

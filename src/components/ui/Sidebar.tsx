@@ -34,9 +34,9 @@ interface SidebarProps {
   role?: "actor" | "director";
 }
 
-/** Shared nav row: enough vertical space for descenders (g, y, p); avoid clipping in overflow-y scroll areas. */
+/** Shared nav row — w-full + min-w-0 prevents text from pushing beyond sidebar width. */
 const navItemClass =
-  "flex items-center gap-3 px-3 min-h-[2.75rem] py-2.5 rounded-xl transition-all leading-[1.4] overflow-visible";
+  "flex items-center gap-3 px-3 min-h-[2.75rem] py-2.5 rounded-xl transition-all leading-[1.4] w-full min-w-0";
 
 export function Sidebar({ className, role: roleProp }: SidebarProps) {
   const location = useLocation();
@@ -129,7 +129,7 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
             <X className="h-4 w-4" />
           </Button>
         </div>
-        <div className="sidebar-nav flex-grow px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
+        <div className="sidebar-nav flex-grow min-h-0 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
           {(menuItems as any[]).map((item) => (
             <Link key={item.name} to={item.href} onClick={() => setIsMobileOpen(false)}
               className={cn(navItemClass, "group",
@@ -140,25 +140,25 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
               <div className={cn("flex-shrink-0", location.pathname === item.href ? "text-white" : item.highlight ? "text-primary" : "")}>
                 {item.icon}
               </div>
-              <span className="text-sm font-medium [overflow:visible]">{item.name}</span>
+              <span className="text-sm font-medium truncate flex-1 min-w-0">{item.name}</span>
               {item.highlight && location.pathname !== item.href && (
-                <span className="ml-auto text-[9px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">AI</span>
+                <span className="flex-shrink-0 text-[9px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">AI</span>
               )}
             </Link>
           ))}
         </div>
-        <div className="p-3 space-y-1 border-t border-white/5">
+        <div className="flex-shrink-0 p-3 space-y-1 border-t border-white/5">
           {bottomItems.map((item) => (
             <Link key={item.name} to={item.href} onClick={() => setIsMobileOpen(false)}
               className={cn(navItemClass, "text-white/50 hover:bg-white/5 hover:text-white")}>
               <div className="flex-shrink-0">{item.icon}</div>
-              <span className="text-sm font-medium">{item.name}</span>
+              <span className="text-sm font-medium truncate flex-1 min-w-0">{item.name}</span>
             </Link>
           ))}
           <button type="button" onClick={handleLogout}
-            className={cn(navItemClass, "w-full text-white/50 hover:bg-rose-500/10 hover:text-rose-400")}>
+            className={cn(navItemClass, "text-white/50 hover:bg-rose-500/10 hover:text-rose-400")}>
             <LogOut className="h-5 w-5 flex-shrink-0" />
-            <span className="text-sm font-medium">Logout</span>
+            <span className="text-sm font-medium truncate flex-1 min-w-0">Logout</span>
           </button>
         </div>
       </aside>
@@ -166,7 +166,7 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen bg-neutral-900 border-r border-white/5 transition-all duration-300 z-40 flex-col hidden md:flex",
+          "fixed left-0 top-0 h-screen bg-neutral-900 border-r border-white/5 transition-all duration-300 z-40 flex-col hidden md:flex overflow-hidden",
           isCollapsed ? "w-20" : "w-64",
           className
         )}
@@ -203,8 +203,8 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
             className={cn(
               navItemClass,
               "group",
-              location.pathname === item.href 
-                ? "bg-primary text-white shadow-lg shadow-primary/20" 
+              location.pathname === item.href
+                ? "bg-primary text-white shadow-lg shadow-primary/20"
                 : item.highlight
                 ? "text-white/70 hover:bg-primary/10 hover:text-primary border border-dashed border-primary/20"
                 : "text-white/50 hover:bg-white/5 hover:text-white"
@@ -216,69 +216,68 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
             )}>
               {item.icon}
             </div>
-            {!isCollapsed && <span className="text-sm font-medium [overflow:visible]">{item.name}</span>}
+            {!isCollapsed && <span className="text-sm font-medium truncate flex-1 min-w-0">{item.name}</span>}
             {!isCollapsed && item.highlight && location.pathname !== item.href && (
-              <span className="ml-auto text-[9px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">AI</span>
+              <span className="flex-shrink-0 text-[9px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">AI</span>
             )}
           </Link>
         ))}
+
+        {/* Verified badge card — inside scrollable area so it doesn't break fixed footer */}
+        {!isCollapsed && (
+          <div className="pt-2 pb-1">
+            <Card variant="glass" className="p-4 bg-primary/5 border-primary/20 space-y-2">
+              <div className="flex items-center space-x-2 text-primary">
+                <ShieldCheck className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs font-bold uppercase tracking-widest truncate">
+                  {role === "director" ? t("verifiedStudio") : t("verifiedPro")}
+                </span>
+              </div>
+              <p className="text-[10px] text-white/50 leading-relaxed">
+                {role === "director"
+                  ? "Your studio profile is verified. You get priority in listing visibility."
+                  : "Your profile is verified. You get priority in casting call results."}
+              </p>
+            </Card>
+          </div>
+        )}
       </div>
 
-      <div className="p-3 space-y-1 border-t border-white/5">
+      {/* ── FIXED FOOTER ── */}
+      <div className="flex-shrink-0 p-3 space-y-1 border-t border-white/5">
         {bottomItems.map((item) => (
           <Link
             key={item.name}
             to={item.href}
-            className={cn(
-              navItemClass,
-              "group text-white/50 hover:bg-white/5 hover:text-white"
-            )}
+            className={cn(navItemClass, "group text-white/50 hover:bg-white/5 hover:text-white")}
           >
             <div className="flex-shrink-0 transition-transform group-hover:scale-110 group-hover:text-primary">
               {item.icon}
             </div>
-            {!isCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+            {!isCollapsed && <span className="text-sm font-medium truncate flex-1 min-w-0">{item.name}</span>}
           </Link>
         ))}
         <button
           type="button"
           onClick={toggleTheme}
-          className={cn(navItemClass, "w-full text-white/50 hover:bg-white/5 hover:text-white")}
+          className={cn(navItemClass, "text-white/50 hover:bg-white/5 hover:text-white")}
         >
           <div className="flex-shrink-0">
             {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </div>
-          {!isCollapsed && <span className="text-sm font-medium">{theme === "dark" ? t("lightMode") : t("darkMode")}</span>}
+          {!isCollapsed && <span className="text-sm font-medium truncate flex-1 min-w-0">{theme === "dark" ? t("lightMode") : t("darkMode")}</span>}
         </button>
         <button
           type="button"
           onClick={handleLogout}
-          className={cn(navItemClass, "w-full text-white/50 hover:bg-rose-500/10 hover:text-rose-400")}
+          className={cn(navItemClass, "text-white/50 hover:bg-rose-500/10 hover:text-rose-400")}
         >
-          <div className="flex-shrink-0 transition-transform group-hover:scale-110">
+          <div className="flex-shrink-0">
             <LogOut className="h-5 w-5" />
           </div>
-          {!isCollapsed && <span className="text-sm font-medium">{t("logout")}</span>}
+          {!isCollapsed && <span className="text-sm font-medium truncate flex-1 min-w-0">{t("logout")}</span>}
         </button>
       </div>
-
-      {!isCollapsed && (
-        <div className="p-6">
-          <Card variant="glass" className="p-4 bg-primary/5 border-primary/20 space-y-3">
-            <div className="flex items-center space-x-2 text-primary">
-              <ShieldCheck className="h-4 w-4" />
-              <span className="text-xs font-bold uppercase tracking-widest">
-                {role === "director" ? t("verifiedStudio") : t("verifiedPro")}
-              </span>
-            </div>
-            <p className="text-[10px] text-white/50 leading-relaxed">
-              {role === "director" 
-                ? "Your studio profile is verified. You get priority in listing visibility." 
-                : "Your profile is verified. You get priority in casting call results."}
-            </p>
-          </Card>
-        </div>
-      )}
     </aside>
     </>
   );
