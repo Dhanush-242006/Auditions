@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-primary: #f27d26;
+  --color-primary-dark: #d66a1a;
+  --color-accent: #8b5cf6;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-md border border-white/10;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+}
+
+body {
+  @apply bg-neutral-950 text-white font-sans antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-display;
+}
+
+/* ── Light Mode ─────────────────────────────────────── */
+[data-theme="light"] body {
+  background-color: #f5f1ec !important;
+  color: #1a1208 !important;
+}
+
+/* Main dark backgrounds → warm cream */
+[data-theme="light"] .bg-neutral-950 { background-color: #f5f1ec !important; }
+[data-theme="light"] .bg-neutral-900 { background-color: #ede8e2 !important; }
+[data-theme="light"] .bg-neutral-800 { background-color: #e4ddd5 !important; }
+
+/* Subtle overlay backgrounds */
+[data-theme="light"] .bg-white\/\[0\.03\] { background-color: rgba(0,0,0,0.03) !important; }
+[data-theme="light"] .bg-white\/5  { background-color: rgba(0,0,0,0.04) !important; }
+[data-theme="light"] .bg-white\/8  { background-color: rgba(0,0,0,0.05) !important; }
+[data-theme="light"] .bg-white\/10 { background-color: rgba(0,0,0,0.06) !important; }
+[data-theme="light"] .bg-white\/15 { background-color: rgba(0,0,0,0.08) !important; }
+[data-theme="light"] .bg-white\/20 { background-color: rgba(0,0,0,0.10) !important; }
+
+/* Black overlays (modals, backdrops) */
+[data-theme="light"] .bg-black\/60  { background-color: rgba(0,0,0,0.45) !important; }
+[data-theme="light"] .bg-black\/40  { background-color: rgba(0,0,0,0.25) !important; }
+
+/* Text colours */
+[data-theme="light"] .text-white       { color: #1a1208 !important; }
+[data-theme="light"] .text-white\/80   { color: #2d2416 !important; }
+[data-theme="light"] .text-white\/70   { color: #3d3222 !important; }
+[data-theme="light"] .text-white\/60   { color: #4f4230 !important; }
+[data-theme="light"] .text-white\/50   { color: #6b5c4a !important; }
+[data-theme="light"] .text-white\/40   { color: #7c6d58 !important; }
+[data-theme="light"] .text-white\/30   { color: #9a8c7a !important; }
+[data-theme="light"] .text-white\/20   { color: #b0a494 !important; }
+
+/* Borders */
+[data-theme="light"] .border-white\/5  { border-color: rgba(0,0,0,0.06) !important; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
+[data-theme="light"] .border-white\/20 { border-color: rgba(0,0,0,0.14) !important; }
+[data-theme="light"] .border-white\/30 { border-color: rgba(0,0,0,0.18) !important; }
+
+/* Glass utilities */
+[data-theme="light"] .glass {
+  background-color: rgba(255,255,255,0.75) !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+[data-theme="light"] .glass-dark {
+  background-color: rgba(255,255,255,0.65) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+
+/* Navbar scrolled state */
+[data-theme="light"] .bg-neutral-950\/80 {
+  background-color: rgba(245,241,236,0.85) !important;
+}
+
+/* Inputs & selects */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  color: #1a1208 !important;
+  background-color: rgba(0,0,0,0.04) !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #9a8c7a !important;
+}
+
+/* Scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track { background: #ede8e2; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+
+/* Sidebar nav scrollbar */
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 99px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(242,125,38,0.6); border-radius: 99px; }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(242,125,38,1); }
+.sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(242,125,38,0.6) rgba(255,255,255,0.05); }
+

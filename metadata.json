@@ -1,0 +1,5 @@
+{
+  "name": "Auditions Adda",
+  "description": "India's Smart Casting Marketplace for actors and casting directors.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
