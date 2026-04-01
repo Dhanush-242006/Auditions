@@ -39,6 +39,21 @@ body {
   position: relative;
 }
 
+/* ── Native <select> dropdown — dark background globally ──────
+   The dropdown list (option elements) renders outside the DOM
+   and inherits the OS default (white). Force it dark here.     */
+select,
+select option {
+  background-color: #0a0a0a;   /* neutral-950 — matches page bg  */
+  color: #ffffff;
+}
+select option:hover,
+select option:focus,
+select option:checked {
+  background-color: #f27d26;   /* primary orange when selected   */
+  color: #ffffff;
+}
+
 h1, h2, h3, h4, h5, h6 {
   @apply font-display;
 }
