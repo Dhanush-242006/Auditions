@@ -127,9 +127,9 @@ export function ShortlistManagerPage() {
   const detail = detailId ? APPLICANTS.find(a => a.id === detailId) : null;
 
   return (
-    <div className="flex min-h-screen bg-neutral-950">
+    <div className="flex min-h-screen bg-neutral-950 overflow-x-hidden">
       <Sidebar role="director" />
-      <main className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 min-w-0 overflow-x-hidden p-6 lg:p-8 max-w-7xl mx-auto w-full">
         <BackButton />
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>

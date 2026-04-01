@@ -279,7 +279,7 @@ export function ProjectDetailPage() {
     return (
       <div className="min-h-screen bg-neutral-950 flex">
         <Sidebar role="director" />
-        <main className="flex-grow md:ml-64 flex items-center justify-center">
+        <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden flex items-center justify-center">
           <div className="text-center space-y-4">
             <AlertCircle className="h-16 w-16 text-white/20 mx-auto" />
             <h2 className="text-2xl font-bold">Project Not Found</h2>

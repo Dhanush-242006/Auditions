@@ -51,10 +51,10 @@ export function AnalyticsPage() {
   const [period, setPeriod] = React.useState("30");
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex">
+    <div className="min-h-screen bg-neutral-950 flex overflow-x-hidden">
       <Sidebar role="director" />
       
-      <main className="flex-grow md:ml-64 p-6 md:p-10 space-y-10">
+      <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden p-6 md:p-10 space-y-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <BackButton />

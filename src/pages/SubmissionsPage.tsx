@@ -112,10 +112,10 @@ export function SubmissionsPage() {
   const isEmpty = submissions.length === 0;
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex">
+    <div className="min-h-screen bg-neutral-950 flex overflow-x-hidden">
       <Sidebar />
       
-      <main className="flex-grow md:ml-64 p-6 md:p-10 space-y-10">
+      <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden p-6 md:p-10 space-y-10">
         <div className="flex items-center">
           <BackButton />
         </div>

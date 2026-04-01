@@ -102,7 +102,7 @@ export function PostAuditionPage() {
     return (
       <div className="min-h-screen bg-neutral-950 flex">
         <Sidebar role="director" />
-        <div className="flex-grow md:ml-64 flex items-center justify-center px-6">
+        <div className="flex-grow md:ml-64 min-w-0 overflow-x-hidden flex items-center justify-center px-6">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -128,7 +128,7 @@ export function PostAuditionPage() {
     <div className="min-h-screen bg-neutral-950 flex">
       <Sidebar role="director" />
 
-      <div className="flex-grow md:ml-64 px-6 py-12 space-y-10">
+      <div className="flex-grow md:ml-64 min-w-0 overflow-x-hidden px-6 py-12 space-y-10">
         <div className="max-w-3xl mx-auto space-y-10">
           <div className="space-y-4">
             <BackButton />

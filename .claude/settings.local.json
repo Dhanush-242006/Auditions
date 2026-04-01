@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls 'C:\\\\Users\\\\Administrator\\\\Downloads\\\\Auditions-main \\(2\\)\\\\Auditions-main\\\\public')",
+      "Bash(ls 'C:\\\\Users\\\\Administrator\\\\Downloads\\\\Auditions-main \\(2\\)\\\\Auditions-main')"
+    ]
+  }
+}

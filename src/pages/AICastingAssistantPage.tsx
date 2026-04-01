@@ -616,7 +616,7 @@ Tell me more about your current situation and I'll give you a specific, actionab
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex">
+    <div className="min-h-screen bg-neutral-950 flex overflow-x-hidden">
       <Sidebar />
 
       <main className="flex-grow md:ml-64 flex flex-col h-screen overflow-hidden">

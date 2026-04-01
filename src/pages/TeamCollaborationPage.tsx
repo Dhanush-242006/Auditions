@@ -65,9 +65,9 @@ export function TeamCollaborationPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-neutral-950">
+    <div className="flex min-h-screen bg-neutral-950 overflow-x-hidden">
       <Sidebar role="director" />
-      <main className="flex-1 p-6 lg:p-8 max-w-7xl mx-auto w-full">
+      <main className="flex-1 min-w-0 overflow-x-hidden p-6 lg:p-8 max-w-7xl mx-auto w-full">
         <BackButton />
         <div className="flex items-center justify-between mb-8">
           <div>
