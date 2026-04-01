@@ -38,6 +38,7 @@ import { ShortlistManagerPage } from "./pages/ShortlistManagerPage";
 import { VerificationBadgePage } from "./pages/VerificationBadgePage";
 import { RegionalPage } from "./pages/RegionalPage";
 import { TeamCollaborationPage } from "./pages/TeamCollaborationPage";
+import { ProjectDetailPage } from "./pages/ProjectDetailPage";
 
 /** Routes that share the app sidebar — switching between them should not jump scroll to top. */
 const APP_SHELL_PATHS = new Set([
@@ -125,6 +126,7 @@ export default function App() {
         <Route path="/team-collab" element={<TeamCollaborationPage />} />
         <Route path="/virtual-audition" element={<VirtualAuditionPage />} />
         <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/projects/:id" element={<ProjectDetailPage />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

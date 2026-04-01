@@ -308,7 +308,7 @@ export function MyProjectsPage() {
                 <Card
                   variant="outline"
                   className="overflow-hidden hover:border-white/20 transition-all group cursor-pointer"
-                  onClick={() => navigate("/post-audition")}
+                  onClick={() => navigate(`/projects/${project.id}`)}
                 >
                   {/* Project Image */}
                   <div className="relative h-40 overflow-hidden">
@@ -380,10 +380,10 @@ export function MyProjectsPage() {
                         variant="outline"
                         size="sm"
                         className="flex-1 rounded-lg text-xs"
-                        onClick={(e) => { e.stopPropagation(); navigate("/actors"); }}
+                        onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}`); }}
                       >
-                        <Users className="mr-1 h-3 w-3" />
-                        View Applicants
+                        <Eye className="mr-1 h-3 w-3" />
+                        View Details
                       </Button>
                       <Button
                         variant="ghost"
@@ -419,7 +419,7 @@ export function MyProjectsPage() {
                   <tr
                     key={project.id}
                     className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
-                    onClick={() => navigate("/post-audition")}
+                    onClick={() => navigate(`/projects/${project.id}`)}
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3">
@@ -465,7 +465,7 @@ export function MyProjectsPage() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 rounded-full"
-                          onClick={(e) => { e.stopPropagation(); navigate("/post-audition"); }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}`); }}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>

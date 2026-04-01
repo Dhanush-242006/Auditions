@@ -298,7 +298,7 @@ export function DirectorProfilePage() {
                         </div>
                         <div className="flex items-center justify-between pt-3 border-t border-white/5">
                           <span className="text-xs text-white/50">{project.castingStatus}</span>
-                          <Button variant="ghost" size="sm" className="text-xs h-8" onClick={() => navigate("/my-projects")}>
+                          <Button variant="ghost" size="sm" className="text-xs h-8 text-primary hover:text-primary" onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}`); }}>
                             View Details
                           </Button>
                         </div>
