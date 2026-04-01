@@ -29,6 +29,29 @@ export function PostAuditionPage() {
   const navigate = useNavigate();
   const [step, setStep] = React.useState(1);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [uploadedFiles, setUploadedFiles] = React.useState<File[]>([]);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFiles = (files: FileList | null) => {
+    if (!files) return;
+    const allowed = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const valid = Array.from(files).filter(
+      (f) => allowed.includes(f.type) && f.size <= maxSize
+    );
+    setUploadedFiles((prev) => [...prev, ...valid]);
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleFiles(e.dataTransfer.files);
+  };
   const [slots, setSlots] = React.useState<{ date: string; time: string; duration: string; location: string }[]>([
     { date: "", time: "", duration: "60", location: "" },
   ]);
@@ -311,12 +334,70 @@ export function PostAuditionPage() {
                       />
                     </div>
                   </div>
-                  <div className="p-6 border-2 border-dashed border-white/10 rounded-2xl text-center space-y-2 hover:border-primary/50 transition-colors cursor-pointer">
-                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto">
-                      <Upload className="h-6 w-6 text-white/40" />
+                  {/* ── Upload Zone ── */}
+                  <div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => handleFiles(e.target.files)}
+                    />
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => fileInputRef.current?.click()}
+                      onKeyDown={(e) => e.key === "Enter" && fileInputRef.current?.click()}
+                      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={handleDrop}
+                      className={`p-6 border-2 border-dashed rounded-2xl text-center space-y-2 cursor-pointer transition-colors select-none ${
+                        isDragging
+                          ? "border-primary bg-primary/10"
+                          : "border-white/10 hover:border-primary/50 hover:bg-white/[0.02]"
+                      }`}
+                    >
+                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto">
+                        <Upload className={`h-6 w-6 ${isDragging ? "text-primary" : "text-white/40"}`} />
+                      </div>
+                      <p className="text-sm font-medium">
+                        {isDragging ? "Drop files here" : "Upload Script or Reference Images"}
+                      </p>
+                      <p className="text-xs text-white/30">PDF, JPG, PNG up to 10MB — click or drag & drop</p>
                     </div>
-                    <p className="text-sm font-medium">Upload Script or Reference Images</p>
-                    <p className="text-xs text-white/30">PDF, JPG, PNG up to 10MB</p>
+
+                    {uploadedFiles.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        {uploadedFiles.map((file, i) => {
+                          const isImage = file.type.startsWith("image/");
+                          const sizeKB = (file.size / 1024).toFixed(0);
+                          const preview = isImage ? URL.createObjectURL(file) : null;
+                          return (
+                            <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-3 py-2">
+                              {preview ? (
+                                <img src={preview} alt={file.name} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                  <FileText className="h-5 w-5 text-primary" />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium truncate">{file.name}</p>
+                                <p className="text-[10px] text-white/40">{sizeKB} KB</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); removeFile(i); }}
+                                className="flex-shrink-0 text-white/30 hover:text-rose-400 transition-colors"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
