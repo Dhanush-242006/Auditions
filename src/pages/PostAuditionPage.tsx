@@ -10,6 +10,7 @@ import { BackButton } from "@/src/components/ui/BackButton";
 import { cn } from "@/src/lib/utils";
 import { savePostedAudition } from "@/src/lib/postedAuditions";
 import { saveSlots, type AuditionSlot } from "@/src/lib/scheduling";
+import { saveUserProject } from "@/src/lib/userProjects";
 import type { Audition } from "@/src/types";
 
 function formatDeadlineDisplay(isoDate: string): string {
@@ -80,6 +81,33 @@ export function PostAuditionPage() {
         script: undefined,
       };
       savePostedAudition(audition);
+
+      // Save to My Projects
+      saveUserProject({
+        id,
+        title: form.title.trim(),
+        type: form.category,
+        status: "Casting",
+        statusColor: "primary",
+        producer: form.company.trim(),
+        director: "",
+        location: form.location.trim(),
+        description: form.description.trim(),
+        deadline: formatDeadlineDisplay(form.deadline),
+        ageRange: form.ageRange.trim() || "Any",
+        gender: form.gender,
+        image: `https://picsum.photos/seed/${id}/400/225`,
+        castingProgress: 0,
+        totalRoles: 0,
+        filledRoles: 0,
+        activeAuditions: 1,
+        totalApplicants: 0,
+        startDate: "Now",
+        endDate: formatDeadlineDisplay(form.deadline) || "TBD",
+        budget: "TBD",
+        createdAt: new Date().toISOString(),
+      });
+
       // Save scheduling slots
       const filledSlots: AuditionSlot[] = slots
         .filter(s => s.date && s.time)
@@ -113,8 +141,11 @@ export function PostAuditionPage() {
             </div>
             <h1 className="text-3xl font-bold font-display tracking-tight">Audition Published!</h1>
             <p className="text-white/60">Your casting call is now live and being matched with top talent. You'll receive notifications as soon as actors start applying.</p>
-            <div className="pt-6">
-              <Button onClick={() => navigate("/director-dashboard")} className="w-full rounded-xl">
+            <div className="pt-6 space-y-3">
+              <Button onClick={() => navigate("/my-projects")} className="w-full rounded-xl">
+                View in My Projects
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/director-dashboard")} className="w-full rounded-xl">
                 Go to Dashboard
               </Button>
             </div>

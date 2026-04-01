@@ -28,6 +28,7 @@ import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
 import { Card } from "@/src/components/ui/Card";
 import { Sidebar } from "@/src/components/ui/Sidebar";
+import { loadUserProjects, deleteUserProject, type UserProject } from "@/src/lib/userProjects";
 import { BackButton } from "@/src/components/ui/BackButton";
 import { Input } from "@/src/components/ui/Input";
 
@@ -117,6 +118,40 @@ const PROJECTS = [
 const PROJECT_TYPES = ["All Types", "Feature Film", "Web Series", "Podcast Drama", "Theater", "Commercial", "Short Film"];
 const PROJECT_STATUS = ["All Status", "Casting", "Pre-Production", "In Production", "Post-Production", "Completed"];
 
+/** Convert a stored UserProject into the same shape as PROJECTS[] */
+function getTypeIcon(type: string) {
+  switch (type) {
+    case "Web Series":    return <Tv className="h-4 w-4" />;
+    case "Podcast Drama": return <Radio className="h-4 w-4" />;
+    case "Theater":       return <Theater className="h-4 w-4" />;
+    default:              return <Film className="h-4 w-4" />;
+  }
+}
+
+function userProjectToDisplay(p: UserProject) {
+  return {
+    id: p.id,
+    title: p.title,
+    type: p.type,
+    typeIcon: getTypeIcon(p.type),
+    status: p.status,
+    statusColor: p.statusColor,
+    director: p.director || "—",
+    producer: p.producer,
+    startDate: p.startDate,
+    endDate: p.endDate,
+    budget: p.budget,
+    castingProgress: p.castingProgress,
+    totalRoles: p.totalRoles,
+    filledRoles: p.filledRoles,
+    activeAuditions: p.activeAuditions,
+    totalApplicants: p.totalApplicants,
+    image: p.image,
+    description: p.description || `${p.type} — ${p.location}`,
+    isUserCreated: true,
+  };
+}
+
 const BUDGET_KEY = "auditions_project_budgets";
 
 interface BudgetLine { id: string; category: string; allocated: number; spent: number; }
@@ -139,6 +174,21 @@ export function MyProjectsPage() {
   const [viewMode, setViewMode] = React.useState<"grid" | "list">("grid");
   const [budgetProjectId, setBudgetProjectId] = React.useState<string | null>(null);
   const [budgets, setBudgets] = React.useState<Record<string, ProjectBudget>>(() => loadBudgets());
+
+  // Load user-created projects from localStorage and merge with static ones
+  const [userProjects, setUserProjects] = React.useState<UserProject[]>(() => loadUserProjects());
+
+  React.useEffect(() => {
+    const handler = () => setUserProjects(loadUserProjects());
+    window.addEventListener("userProjectsUpdated", handler);
+    return () => window.removeEventListener("userProjectsUpdated", handler);
+  }, []);
+
+  // Combined list: user projects first (newest), then static demo projects
+  const ALL_PROJECTS = [
+    ...userProjects.map(userProjectToDisplay),
+    ...PROJECTS,
+  ];
 
   const getBudgetForProject = (projectId: string): ProjectBudget => {
     if (budgets[projectId]) return budgets[projectId];
@@ -173,7 +223,7 @@ export function MyProjectsPage() {
     saveBudgets(newBudgets);
   };
 
-  const filteredProjects = PROJECTS.filter((project) => {
+  const filteredProjects = ALL_PROJECTS.filter((project) => {
     const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.director.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = selectedType === "All Types" || project.type === selectedType;
@@ -182,10 +232,10 @@ export function MyProjectsPage() {
   });
 
   const stats = [
-    { label: "Total Projects", value: PROJECTS.length, icon: <Clapperboard className="h-5 w-5 text-primary" /> },
-    { label: "Active Castings", value: PROJECTS.reduce((acc, p) => acc + p.activeAuditions, 0), icon: <Users className="h-5 w-5 text-blue-500" /> },
-    { label: "Total Applicants", value: "4.5K", icon: <Eye className="h-5 w-5 text-emerald-500" /> },
-    { label: "Roles Filled", value: `${PROJECTS.reduce((acc, p) => acc + p.filledRoles, 0)}/${PROJECTS.reduce((acc, p) => acc + p.totalRoles, 0)}`, icon: <CheckCircle2 className="h-5 w-5 text-amber-500" /> },
+    { label: "Total Projects", value: ALL_PROJECTS.length, icon: <Clapperboard className="h-5 w-5 text-primary" /> },
+    { label: "Active Castings", value: ALL_PROJECTS.reduce((acc, p) => acc + p.activeAuditions, 0), icon: <Users className="h-5 w-5 text-blue-500" /> },
+    { label: "Total Applicants", value: ALL_PROJECTS.reduce((acc, p) => acc + p.totalApplicants, 0).toLocaleString(), icon: <Eye className="h-5 w-5 text-emerald-500" /> },
+    { label: "Roles Filled", value: `${ALL_PROJECTS.reduce((acc, p) => acc + p.filledRoles, 0)}/${ALL_PROJECTS.reduce((acc, p) => acc + p.totalRoles, 0)}`, icon: <CheckCircle2 className="h-5 w-5 text-amber-500" /> },
   ];
 
   const getStatusIcon = (status: string) => {
@@ -325,7 +375,12 @@ export function MyProjectsPage() {
                         <span className="ml-1">{project.type}</span>
                       </Badge>
                     </div>
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
+                      {(project as any).isUserCreated && (
+                        <span className="text-[9px] font-bold bg-emerald-500 text-white px-2 py-0.5 rounded-full">
+                          NEW
+                        </span>
+                      )}
                       <Badge
                         variant={project.statusColor as any}
                         className="text-[10px]"
@@ -394,6 +449,22 @@ export function MyProjectsPage() {
                         <IndianRupee className="h-3 w-3" />
                         Budget
                       </Button>
+                      {(project as any).isUserCreated && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-lg text-xs gap-1 text-rose-400 hover:bg-rose-500/10"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm("Delete this project?")) {
+                              deleteUserProject(project.id);
+                              setUserProjects(loadUserProjects());
+                            }
+                          }}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </Card>
