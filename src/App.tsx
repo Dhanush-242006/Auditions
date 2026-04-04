@@ -39,6 +39,7 @@ import { VerificationBadgePage } from "./pages/VerificationBadgePage";
 import { RegionalPage } from "./pages/RegionalPage";
 import { TeamCollaborationPage } from "./pages/TeamCollaborationPage";
 import { ProjectDetailPage } from "./pages/ProjectDetailPage";
+import { TalentFlowPage } from "./pages/TalentFlowPage";
 
 /** Routes that share the app sidebar — switching between them should not jump scroll to top. */
 const APP_SHELL_PATHS = new Set([
@@ -64,6 +65,7 @@ const APP_SHELL_PATHS = new Set([
   "/director-profile",
   "/admin",
   "/virtual-audition",
+  "/talent-flow",
 ]);
 
 function ScrollToTop() {
@@ -127,6 +129,7 @@ export default function App() {
         <Route path="/virtual-audition" element={<VirtualAuditionPage />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
+        <Route path="/talent-flow" element={<TalentFlowPage />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

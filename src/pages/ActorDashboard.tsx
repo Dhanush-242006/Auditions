@@ -18,6 +18,7 @@ import {
   Mail,
   Send,
   X,
+  Footprints,
 } from "lucide-react";
 import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
@@ -140,6 +141,29 @@ export function ActorDashboard() {
             </div>
           </motion.div>
         )}
+
+        {/* Talent Flow CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-accent/15 via-accent/5 to-transparent border border-accent/20 p-5 flex items-center justify-between gap-4 cursor-pointer group hover:border-accent/40 transition-all"
+          onClick={() => navigate("/talent-flow")}
+        >
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center flex-shrink-0 group-hover:bg-accent/25 transition-colors">
+              <Footprints className="h-5 w-5 text-accent" />
+            </div>
+            <div>
+              <p className="font-bold text-sm">Your Talent Journey</p>
+              <p className="text-xs text-white/50 mt-0.5">Follow 5 guided steps to complete your profile and get discovered faster.</p>
+            </div>
+          </div>
+          <Button size="sm" variant="secondary" className="rounded-full text-xs flex-shrink-0" onClick={e => { e.stopPropagation(); navigate("/talent-flow"); }}>
+            Get Started
+            <ChevronRight className="ml-1 h-3.5 w-3.5" />
+          </Button>
+        </motion.div>
 
         <Card variant="glass" className="relative overflow-hidden border-primary/20 bg-primary/5">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">

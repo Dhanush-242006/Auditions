@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { 
+import {
   LayoutDashboard,
   Search,
   User,
@@ -21,6 +21,7 @@ import {
   Menu,
   Sun,
   Moon,
+  Footprints,
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "./Button";
@@ -71,6 +72,7 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
     { name: t("regional"),     icon: <ShieldCheck className="h-5 w-5" />, href: "/regional" },
     { name: t("verification"), icon: <ShieldCheck className="h-5 w-5" />, href: "/verification" },
     { name: t("aiAssistant"),  icon: <Sparkles className="h-5 w-5" />, href: "/ai-assistant", highlight: true },
+    { name: "My Journey",      icon: <Footprints className="h-5 w-5" />, href: "/talent-flow" },
   ];
 
   const directorMenuItems = [
