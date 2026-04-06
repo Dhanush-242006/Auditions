@@ -22,6 +22,7 @@ import {
   Sun,
   Moon,
   Footprints,
+  Clapperboard,
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "./Button";
@@ -123,7 +124,7 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
         <div className="p-5 flex items-center justify-between border-b border-white/5">
           <Link to="/" className="flex items-center space-x-2" onClick={() => setIsMobileOpen(false)}>
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
+              <Clapperboard className="h-4 w-4 text-white" strokeWidth={2} />
             </div>
             <span className="text-lg font-bold font-display tracking-tight">Auditions Adda</span>
           </Link>
@@ -177,14 +178,14 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
         {!isCollapsed && (
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-white font-bold text-lg">A</span>
+              <Clapperboard className="h-4 w-4 text-white" strokeWidth={2} />
             </div>
             <span className="text-lg font-bold font-display tracking-tight">Auditions Adda</span>
           </Link>
         )}
         {isCollapsed && (
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mx-auto">
-            <span className="text-white font-bold text-lg">A</span>
+            <Clapperboard className="h-4 w-4 text-white" strokeWidth={2} />
           </div>
         )}
         <Button

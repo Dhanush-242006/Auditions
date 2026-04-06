@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Bell, User, Search, LogIn, Sun, Moon } from "lucide-react";
+import { Menu, X, Bell, User, Search, LogIn, Sun, Moon, Clapperboard } from "lucide-react";
 import { Button } from "./Button";
 import { Badge } from "./Badge";
 import { cn } from "@/src/lib/utils";
@@ -40,7 +40,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2 group">
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
-            <span className="text-white font-bold text-xl">A</span>
+            <Clapperboard className="h-5 w-5 text-white" strokeWidth={2} />
           </div>
           <span className="text-xl font-bold font-display tracking-tight">
             Auditions <span className="text-primary">Adda</span>
