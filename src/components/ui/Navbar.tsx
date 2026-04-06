@@ -13,7 +13,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { lang, setLang } = useLang();
+  const { lang, setLang, t } = useLang();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -23,11 +23,11 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks: { name: string; href: string }[] = [
-    { name: "Talent", href: "/auditions" },
-    { name: "Actors", href: "/actors" },
-    { name: "Blog", href: "/blog" },
-    { name: "About", href: "/about" },
+  const navLinks = [
+    { name: t("nav_talent"), href: "/auditions" },
+    { name: t("nav_actors"), href: "/actors" },
+    { name: t("nav_blog"),   href: "/blog" },
+    { name: t("nav_about"),  href: "/about" },
   ];
 
   return (
@@ -85,7 +85,7 @@ export function Navbar() {
           </Button>
           <Link to="/login">
             <Button variant="primary" size="sm" className="rounded-full">
-              Dashboard
+              {t("nav_dashboard")}
             </Button>
           </Link>
         </div>
