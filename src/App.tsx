@@ -2,6 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./lib/theme";
 import { LangProvider } from "./lib/i18n";
+import { ColorThemeProvider } from "./lib/colorTheme";
 import { LandingPage } from "./pages/LandingPage";
 import { AuditionListingsPage } from "./pages/AuditionListingsPage";
 import { ActorDashboard } from "./pages/ActorDashboard";
@@ -87,6 +88,7 @@ function ScrollToTop() {
 
 export default function App() {
   return (
+    <ColorThemeProvider>
     <LangProvider>
     <ThemeProvider>
     <Router>
@@ -136,5 +138,6 @@ export default function App() {
     </Router>
     </ThemeProvider>
     </LangProvider>
+    </ColorThemeProvider>
   );
 }

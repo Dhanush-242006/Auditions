@@ -30,6 +30,7 @@ import { Card } from "./Card";
 import { supabase } from "@/src/lib/supabase";
 import { useTheme } from "@/src/lib/theme";
 import { useLang } from "@/src/lib/i18n";
+import { useColorTheme, COLOR_THEMES } from "@/src/lib/colorTheme";
 
 interface SidebarProps {
   className?: string;
@@ -47,6 +48,7 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
   const { theme, toggleTheme } = useTheme();
   const { t } = useLang();
+  const { colorTheme, setColorTheme } = useColorTheme();
 
   const role = React.useMemo<"actor" | "director">(() => {
     if (roleProp) return roleProp;
@@ -270,6 +272,36 @@ export function Sidebar({ className, role: roleProp }: SidebarProps) {
           </div>
           {!isCollapsed && <span className="text-sm font-medium truncate flex-1 min-w-0">{theme === "dark" ? t("lightMode") : t("darkMode")}</span>}
         </button>
+
+        {/* Colour theme swatches */}
+        {!isCollapsed && (
+          <div className="px-3 py-2">
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2 font-semibold">Accent</p>
+            <div className="flex flex-wrap gap-1.5">
+              {COLOR_THEMES.map(c => (
+                <button
+                  key={c.key}
+                  onClick={() => setColorTheme(c.key)}
+                  title={c.label}
+                  className={cn(
+                    "w-5 h-5 rounded-full ring-2 transition-all hover:scale-110",
+                    colorTheme === c.key ? "ring-white/70 scale-110" : "ring-transparent hover:ring-white/30"
+                  )}
+                  style={{ background: c.primary }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {isCollapsed && (
+          <div className="px-3 py-2 flex justify-center">
+            <div
+              className="w-5 h-5 rounded-full ring-2 ring-white/40"
+              style={{ background: COLOR_THEMES.find(c => c.key === colorTheme)?.primary }}
+            />
+          </div>
+        )}
+
         <button
           type="button"
           onClick={handleLogout}
