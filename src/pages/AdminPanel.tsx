@@ -44,7 +44,7 @@ const USER_DATA = [
   { name: "Admins", value: 120 },
 ];
 
-const COLORS = ["#1D4ED8", "#8b5cf6", "#10b981"];
+const COLORS = ["#0D9488", "#8b5cf6", "#10b981"];
 
 export function AdminPanel() {
   const stats = [
