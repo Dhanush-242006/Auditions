@@ -3,29 +3,80 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
-  
-  --color-primary: #f27d26;
-  --color-primary-dark: #d66a1a;
-  --color-accent: #8b5cf6;
+
+  /* ── Classy Cinema Palette ───────────────────────────────────
+     Primary  : Cinema Gold  — prestige, awards-night luxury
+     Accent   : Deep Amethyst — cinematic richness, exclusivity  */
+  --color-primary:      #C9A84C;
+  --color-primary-dark: #A8892E;
+  --color-accent:       #7C2D9E;
 }
 
 @layer utilities {
   .glass {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
-  
+
   .glass-dark {
     @apply bg-black/40 backdrop-blur-md border border-white/10;
   }
-  
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
   }
+
+  /* ── 3-D helpers ─────────────────────────────────────────── */
+  .perspective-800  { perspective: 800px;  }
+  .perspective-1200 { perspective: 1200px; }
+  .preserve-3d      { transform-style: preserve-3d; }
+
+  /* Gold shimmer keyframe utility */
+  .gold-shimmer {
+    background: linear-gradient(
+      110deg,
+      #C9A84C 0%,
+      #F0D080 45%,
+      #C9A84C 55%,
+      #A8892E 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
-/* ── Global overflow prevention ───────────────────────
-   Stops any element from causing horizontal scrollbars
-   or content bleeding outside the viewport / sidebar.   */
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-20px) rotate(3deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-14px) rotate(-2deg); }
+}
+
+@keyframes orb-pulse {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.25; transform: scale(1.08); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes grid-scroll {
+  from { background-position: 0 0; }
+  to   { background-position: 0 80px; }
+}
+
+/* ── Global overflow prevention ─────────────────────────── */
 html {
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -34,55 +85,60 @@ html {
 body {
   @apply bg-neutral-950 text-white font-sans antialiased;
   overflow-x: hidden;
-  /* Prevent body from being wider than viewport */
   max-width: 100vw;
   position: relative;
+  /* Subtle deep-navy warmth over pure black */
+  background-color: #080810;
 }
 
-/* ── Native <select> dropdown — dark background globally ──────
-   The dropdown list (option elements) renders outside the DOM
-   and inherits the OS default (white). Force it dark here.     */
+/* ── Native <select> ──────────────────────────────────────── */
 select,
 select option {
-  background-color: #0a0a0a;   /* neutral-950 — matches page bg  */
+  background-color: #080810;
   color: #ffffff;
 }
 select option:hover,
 select option:focus,
 select option:checked {
-  background-color: #f27d26;   /* primary orange when selected   */
-  color: #ffffff;
+  background-color: #C9A84C;
+  color: #000000;
 }
 
 h1, h2, h3, h4, h5, h6 {
   @apply font-display;
 }
 
-/* ── Sidebar layout: main content never bleeds into sidebar ── */
-/* All pages use <aside w-64> + <main md:ml-64>
-   min-w-0 lets flex children shrink below their content width  */
+/* ── Sidebar layout ───────────────────────────────────────── */
 .flex > main,
 .flex > div > main {
   min-width: 0;
   overflow-x: hidden;
 }
 
-/* Any table / pre / code block should scroll internally, not blow the layout */
 table { width: 100%; table-layout: fixed; }
 pre, code { overflow-x: auto; max-width: 100%; }
 
-/* ── Light Mode ─────────────────────────────────────── */
+/* ── 3D scrolling perspective grid (landing hero bg) ─────── */
+.perspective-grid {
+  background-image:
+    linear-gradient(rgba(201,168,76,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-scroll 8s linear infinite;
+  transform: perspective(600px) rotateX(55deg) scaleX(2.2);
+  transform-origin: top center;
+}
+
+/* ── Light Mode ─────────────────────────────────────────── */
 [data-theme="light"] body {
   background-color: #f5f1ec !important;
   color: #1a1208 !important;
 }
 
-/* Main dark backgrounds → warm cream */
 [data-theme="light"] .bg-neutral-950 { background-color: #f5f1ec !important; }
 [data-theme="light"] .bg-neutral-900 { background-color: #ede8e2 !important; }
 [data-theme="light"] .bg-neutral-800 { background-color: #e4ddd5 !important; }
 
-/* Subtle overlay backgrounds */
 [data-theme="light"] .bg-white\/\[0\.03\] { background-color: rgba(0,0,0,0.03) !important; }
 [data-theme="light"] .bg-white\/5  { background-color: rgba(0,0,0,0.04) !important; }
 [data-theme="light"] .bg-white\/8  { background-color: rgba(0,0,0,0.05) !important; }
@@ -90,11 +146,9 @@ pre, code { overflow-x: auto; max-width: 100%; }
 [data-theme="light"] .bg-white\/15 { background-color: rgba(0,0,0,0.08) !important; }
 [data-theme="light"] .bg-white\/20 { background-color: rgba(0,0,0,0.10) !important; }
 
-/* Black overlays (modals, backdrops) */
 [data-theme="light"] .bg-black\/60  { background-color: rgba(0,0,0,0.45) !important; }
 [data-theme="light"] .bg-black\/40  { background-color: rgba(0,0,0,0.25) !important; }
 
-/* Text colours */
 [data-theme="light"] .text-white       { color: #1a1208 !important; }
 [data-theme="light"] .text-white\/80   { color: #2d2416 !important; }
 [data-theme="light"] .text-white\/70   { color: #3d3222 !important; }
@@ -104,13 +158,11 @@ pre, code { overflow-x: auto; max-width: 100%; }
 [data-theme="light"] .text-white\/30   { color: #9a8c7a !important; }
 [data-theme="light"] .text-white\/20   { color: #b0a494 !important; }
 
-/* Borders */
 [data-theme="light"] .border-white\/5  { border-color: rgba(0,0,0,0.06) !important; }
 [data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
 [data-theme="light"] .border-white\/20 { border-color: rgba(0,0,0,0.14) !important; }
 [data-theme="light"] .border-white\/30 { border-color: rgba(0,0,0,0.18) !important; }
 
-/* Glass utilities */
 [data-theme="light"] .glass {
   background-color: rgba(255,255,255,0.75) !important;
   border-color: rgba(0,0,0,0.10) !important;
@@ -120,12 +172,10 @@ pre, code { overflow-x: auto; max-width: 100%; }
   border-color: rgba(0,0,0,0.08) !important;
 }
 
-/* Navbar scrolled state */
 [data-theme="light"] .bg-neutral-950\/80 {
   background-color: rgba(245,241,236,0.85) !important;
 }
 
-/* Inputs & selects */
 [data-theme="light"] input,
 [data-theme="light"] textarea,
 [data-theme="light"] select {
@@ -138,14 +188,12 @@ pre, code { overflow-x: auto; max-width: 100%; }
   color: #9a8c7a !important;
 }
 
-/* Scrollbar */
 [data-theme="light"] ::-webkit-scrollbar-track { background: #ede8e2; }
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
 
-/* Sidebar nav — thin orange scrollbar matching brand #F58220 */
-.sidebar-nav { scrollbar-width: thin; scrollbar-color: #F58220 rgba(255,255,255,0.05); }
+/* ── Sidebar scrollbar — gold ────────────────────────────── */
+.sidebar-nav { scrollbar-width: thin; scrollbar-color: #C9A84C rgba(255,255,255,0.05); }
 .sidebar-nav::-webkit-scrollbar { width: 4px; }
 .sidebar-nav::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 99px; }
-.sidebar-nav::-webkit-scrollbar-thumb { background: #F58220; border-radius: 99px; opacity: 0.8; }
-.sidebar-nav::-webkit-scrollbar-thumb:hover { background: #ff9535; }
-
+.sidebar-nav::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 99px; opacity: 0.8; }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: #F0D080; }
