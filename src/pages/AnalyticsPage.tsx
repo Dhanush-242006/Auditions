@@ -45,7 +45,7 @@ const GENDER_DATA = [
   { name: "Other", value: 3 },
 ];
 
-const COLORS = ["#0EA5E9", "#3b82f6", "#10b981"];
+const COLORS = ["#C9A87C", "#3b82f6", "#10b981"];
 
 export function AnalyticsPage() {
   const [period, setPeriod] = React.useState("30");
@@ -119,8 +119,8 @@ export function AnalyticsPage() {
                 <AreaChart data={VIEW_DATA}>
                   <defs>
                     <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0EA5E9" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#0EA5E9" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#C9A87C" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#C9A87C" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorApps" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
@@ -134,7 +134,7 @@ export function AnalyticsPage() {
                     contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: "12px" }}
                     itemStyle={{ color: "#fff" }}
                   />
-                  <Area type="monotone" dataKey="views" stroke="#0EA5E9" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
+                  <Area type="monotone" dataKey="views" stroke="#C9A87C" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
                   <Area type="monotone" dataKey="applications" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorApps)" />
                 </AreaChart>
               </ResponsiveContainer>
