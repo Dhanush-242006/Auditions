@@ -30,17 +30,18 @@
   .perspective-1200 { perspective: 1200px; }
   .preserve-3d      { transform-style: preserve-3d; }
 
-  /* Blue → Purple shimmer utility */
+  /* Sky Blue shimmer for hero headline */
   .gold-shimmer {
     background: linear-gradient(
       110deg,
       #0284C7 0%,
-      #38BDF8 35%,
-      #7C3AED 60%,
+      #38BDF8 30%,
+      #7DD3FC 50%,
+      #38BDF8 70%,
       #0284C7 100%
     );
     background-size: 200% 100%;
-    animation: shimmer 3.5s linear infinite;
+    animation: shimmer 3s linear infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

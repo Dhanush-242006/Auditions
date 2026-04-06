@@ -22,8 +22,9 @@ function applyTheme(t: Theme) {
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = React.useState<Theme>(() => {
-    const saved = localStorage.getItem("auditions_theme") as Theme | null;
-    return saved === "dark" ? "dark" : "light";
+    // Force light as the new site default — clears any old dark preference
+    localStorage.setItem("auditions_theme", "light");
+    return "light";
   });
 
   React.useEffect(() => {
