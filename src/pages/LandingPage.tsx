@@ -120,7 +120,7 @@ function Orb({
 }) {
   return (
     <motion.div
-      animate={{ y: [0, -24, 0], scale: [1, 1.06, 1], opacity: [0.18, 0.28, 0.18] }}
+      animate={{ y: [0, -24, 0], scale: [1, 1.06, 1], opacity: [0.12, 0.22, 0.12] }}
       transition={{ duration: 7 + delay, repeat: Infinity, ease: "easeInOut", delay }}
       style={{
         width: size,
@@ -212,7 +212,7 @@ export function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080810] overflow-x-hidden">
+    <div className="min-h-screen bg-neutral-950 overflow-x-hidden">
       <Navbar />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
@@ -221,11 +221,11 @@ export function LandingPage() {
         <div className="absolute inset-x-0 bottom-0 h-[55%] perspective-grid opacity-80 pointer-events-none" />
 
         {/* Ambient orbs */}
-        <Orb size={520} color="radial-gradient(circle,#38BDF8,transparent 70%)"
+        <Orb size={520} color="radial-gradient(circle,#0284C7,transparent 70%)"
           style={{ top: "-8%", left: "-6%" }} delay={0} />
-        <Orb size={420} color="radial-gradient(circle,#A855F7,transparent 70%)"
+        <Orb size={420} color="radial-gradient(circle,#7C3AED,transparent 70%)"
           style={{ top: "10%", right: "-8%" }} delay={2} />
-        <Orb size={300} color="radial-gradient(circle,#38BDF8,transparent 70%)"
+        <Orb size={300} color="radial-gradient(circle,#0284C7,transparent 70%)"
           style={{ bottom: "5%", right: "20%" }} delay={1} />
 
         {/* Film reel accents */}
@@ -465,9 +465,9 @@ export function LandingPage() {
       {/* ── FEATURED CASTING CALLS ─────────────────────────────────── */}
       <section className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0d0b18] to-[#080810] pointer-events-none" />
-        <Orb size={400} color="radial-gradient(circle,#A855F7,transparent 70%)"
+        <Orb size={400} color="radial-gradient(circle,#7C3AED,transparent 70%)"
           style={{ top: "20%", left: "-10%" }} delay={3} />
-        <Orb size={350} color="radial-gradient(circle,#38BDF8,transparent 70%)"
+        <Orb size={350} color="radial-gradient(circle,#0284C7,transparent 70%)"
           style={{ bottom: "10%", right: "-8%" }} delay={1} />
 
         <div className="max-w-7xl mx-auto relative z-10">

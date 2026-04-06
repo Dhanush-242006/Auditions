@@ -23,7 +23,7 @@ function applyTheme(t: Theme) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = React.useState<Theme>(() => {
     const saved = localStorage.getItem("auditions_theme") as Theme | null;
-    return saved === "light" ? "light" : "dark";
+    return saved === "dark" ? "dark" : "light";
   });
 
   React.useEffect(() => {

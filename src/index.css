@@ -5,11 +5,11 @@
   --font-display: "Space Grotesk", sans-serif;
 
   /* ── Electric Cinema Palette ────────────────────────────────
-     Primary  : Electric Sky Blue — modern, vibrant, premium
-     Accent   : Vivid Purple      — luxury, cinematic depth    */
-  --color-primary:      #38BDF8;
-  --color-primary-dark: #0EA5E9;
-  --color-accent:       #A855F7;
+     Primary  : Deep Sky Blue  — bold, readable on light & dark
+     Accent   : Vivid Purple   — luxury, cinematic depth        */
+  --color-primary:      #0284C7;
+  --color-primary-dark: #0369A1;
+  --color-accent:       #7C3AED;
 }
 
 @layer utilities {
@@ -30,14 +30,14 @@
   .perspective-1200 { perspective: 1200px; }
   .preserve-3d      { transform-style: preserve-3d; }
 
-  /* Sky Blue → Purple shimmer utility */
+  /* Blue → Purple shimmer utility */
   .gold-shimmer {
     background: linear-gradient(
       110deg,
-      #38BDF8 0%,
-      #818CF8 35%,
-      #A855F7 55%,
-      #38BDF8 100%
+      #0284C7 0%,
+      #38BDF8 35%,
+      #7C3AED 60%,
+      #0284C7 100%
     );
     background-size: 200% 100%;
     animation: shimmer 3.5s linear infinite;
@@ -129,67 +129,96 @@ pre, code { overflow-x: auto; max-width: 100%; }
   transform-origin: top center;
 }
 
-/* ── Light Mode ─────────────────────────────────────────── */
+/* ── Light Mode ─────────────────────────────────────────────
+   Crisp white + blue-tinted light surfaces.
+   All "dark" backgrounds invert to clean whites/light grays.  */
+
 [data-theme="light"] body {
-  background-color: #f5f1ec !important;
-  color: #1a1208 !important;
+  background-color: #FAF7F2 !important;
+  color: #1C1410 !important;
 }
 
-[data-theme="light"] .bg-neutral-950 { background-color: #f5f1ec !important; }
-[data-theme="light"] .bg-neutral-900 { background-color: #ede8e2 !important; }
-[data-theme="light"] .bg-neutral-800 { background-color: #e4ddd5 !important; }
+/* Page & panel backgrounds */
+[data-theme="light"] .bg-neutral-950,
+[data-theme="light"] .bg-\[#080810\],
+[data-theme="light"] .bg-\[#05050D\] { background-color: #FAF7F2 !important; }
+[data-theme="light"] .bg-neutral-900 { background-color: #FFFFFF   !important; }
+[data-theme="light"] .bg-neutral-800 { background-color: #F2EDE3   !important; }
+[data-theme="light"] .bg-neutral-900\/50 { background-color: rgba(255,255,255,0.8) !important; }
 
-[data-theme="light"] .bg-white\/\[0\.03\] { background-color: rgba(0,0,0,0.03) !important; }
-[data-theme="light"] .bg-white\/5  { background-color: rgba(0,0,0,0.04) !important; }
-[data-theme="light"] .bg-white\/8  { background-color: rgba(0,0,0,0.05) !important; }
-[data-theme="light"] .bg-white\/10 { background-color: rgba(0,0,0,0.06) !important; }
-[data-theme="light"] .bg-white\/15 { background-color: rgba(0,0,0,0.08) !important; }
-[data-theme="light"] .bg-white\/20 { background-color: rgba(0,0,0,0.10) !important; }
+/* Subtle overlay tints → very light blue-gray */
+[data-theme="light"] .bg-white\/\[0\.02\] { background-color: rgba(2,132,199,0.03)  !important; }
+[data-theme="light"] .bg-white\/\[0\.03\] { background-color: rgba(2,132,199,0.04)  !important; }
+[data-theme="light"] .bg-white\/5        { background-color: rgba(2,132,199,0.05)  !important; }
+[data-theme="light"] .bg-white\/8        { background-color: rgba(2,132,199,0.06)  !important; }
+[data-theme="light"] .bg-white\/10       { background-color: rgba(2,132,199,0.07)  !important; }
+[data-theme="light"] .bg-white\/15       { background-color: rgba(2,132,199,0.09)  !important; }
+[data-theme="light"] .bg-white\/20       { background-color: rgba(2,132,199,0.11)  !important; }
 
-[data-theme="light"] .bg-black\/60  { background-color: rgba(0,0,0,0.45) !important; }
-[data-theme="light"] .bg-black\/40  { background-color: rgba(0,0,0,0.25) !important; }
+/* Dark overlays (modals, backdrops) */
+[data-theme="light"] .bg-black\/80 { background-color: rgba(0,0,0,0.55) !important; }
+[data-theme="light"] .bg-black\/60 { background-color: rgba(0,0,0,0.40) !important; }
+[data-theme="light"] .bg-black\/40 { background-color: rgba(0,0,0,0.25) !important; }
 
-[data-theme="light"] .text-white       { color: #1a1208 !important; }
-[data-theme="light"] .text-white\/80   { color: #2d2416 !important; }
-[data-theme="light"] .text-white\/70   { color: #3d3222 !important; }
-[data-theme="light"] .text-white\/60   { color: #4f4230 !important; }
-[data-theme="light"] .text-white\/50   { color: #6b5c4a !important; }
-[data-theme="light"] .text-white\/40   { color: #7c6d58 !important; }
-[data-theme="light"] .text-white\/30   { color: #9a8c7a !important; }
-[data-theme="light"] .text-white\/20   { color: #b0a494 !important; }
+/* Text — warm dark brown scale */
+[data-theme="light"] .text-white      { color: #1C1410 !important; }
+[data-theme="light"] .text-white\/80  { color: #2D2118 !important; }
+[data-theme="light"] .text-white\/70  { color: #3E2F22 !important; }
+[data-theme="light"] .text-white\/60  { color: #5A4535 !important; }
+[data-theme="light"] .text-white\/55  { color: #644E3C !important; }
+[data-theme="light"] .text-white\/50  { color: #7A6050 !important; }
+[data-theme="light"] .text-white\/45  { color: #857060 !important; }
+[data-theme="light"] .text-white\/40  { color: #907A6A !important; }
+[data-theme="light"] .text-white\/35  { color: #9E8A7A !important; }
+[data-theme="light"] .text-white\/30  { color: #AE9D8E !important; }
+[data-theme="light"] .text-white\/20  { color: #C2B4A8 !important; }
 
-[data-theme="light"] .border-white\/5  { border-color: rgba(0,0,0,0.06) !important; }
-[data-theme="light"] .border-white\/10 { border-color: rgba(0,0,0,0.10) !important; }
-[data-theme="light"] .border-white\/20 { border-color: rgba(0,0,0,0.14) !important; }
-[data-theme="light"] .border-white\/30 { border-color: rgba(0,0,0,0.18) !important; }
+/* Borders */
+[data-theme="light"] .border-white\/5  { border-color: rgba(2,132,199,0.12) !important; }
+[data-theme="light"] .border-white\/8  { border-color: rgba(2,132,199,0.14) !important; }
+[data-theme="light"] .border-white\/10 { border-color: rgba(2,132,199,0.16) !important; }
+[data-theme="light"] .border-white\/15 { border-color: rgba(2,132,199,0.20) !important; }
+[data-theme="light"] .border-white\/20 { border-color: rgba(2,132,199,0.24) !important; }
+[data-theme="light"] .border-white\/30 { border-color: rgba(2,132,199,0.30) !important; }
 
+/* Glass cards → white with soft shadow */
 [data-theme="light"] .glass {
-  background-color: rgba(255,255,255,0.75) !important;
-  border-color: rgba(0,0,0,0.10) !important;
+  background-color: rgba(255,255,255,0.85) !important;
+  border-color: rgba(2,132,199,0.18) !important;
+  box-shadow: 0 4px 24px rgba(2,132,199,0.08) !important;
 }
 [data-theme="light"] .glass-dark {
-  background-color: rgba(255,255,255,0.65) !important;
-  border-color: rgba(0,0,0,0.08) !important;
+  background-color: rgba(255,255,255,0.70) !important;
+  border-color: rgba(2,132,199,0.14) !important;
 }
 
+/* Navbar scrolled */
 [data-theme="light"] .bg-neutral-950\/80 {
-  background-color: rgba(245,241,236,0.85) !important;
+  background-color: rgba(250,247,242,0.95) !important;
+  border-bottom: 1px solid rgba(2,132,199,0.10) !important;
 }
 
+/* Inputs */
 [data-theme="light"] input,
 [data-theme="light"] textarea,
 [data-theme="light"] select {
-  color: #1a1208 !important;
-  background-color: rgba(0,0,0,0.04) !important;
-  border-color: rgba(0,0,0,0.12) !important;
+  color: #0F172A !important;
+  background-color: #FFFFFF !important;
+  border-color: rgba(2,132,199,0.20) !important;
 }
 [data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-  color: #9a8c7a !important;
-}
+[data-theme="light"] textarea::placeholder { color: #94A3B8 !important; }
 
-[data-theme="light"] ::-webkit-scrollbar-track { background: #ede8e2; }
-[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+/* Scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track { background: #E8F0FB; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(2,132,199,0.30); }
+
+/* Sidebar — white panel */
+[data-theme="light"] aside {
+  background-color: #FFFFFF !important;
+  border-color: rgba(2,132,199,0.12) !important;
+  box-shadow: 2px 0 16px rgba(2,132,199,0.06) !important;
+}
 
 /* ── Sidebar scrollbar — sky blue ────────────────────────── */
 .sidebar-nav { scrollbar-width: thin; scrollbar-color: #38BDF8 rgba(255,255,255,0.05); }
