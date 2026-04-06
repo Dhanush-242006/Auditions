@@ -221,11 +221,11 @@ export function LandingPage() {
         <div className="absolute inset-x-0 bottom-0 h-[55%] perspective-grid opacity-80 pointer-events-none" />
 
         {/* Ambient orbs */}
-        <Orb size={520} color="radial-gradient(circle,#C9A84C,transparent 70%)"
+        <Orb size={520} color="radial-gradient(circle,#E11D48,transparent 70%)"
           style={{ top: "-8%", left: "-6%" }} delay={0} />
-        <Orb size={420} color="radial-gradient(circle,#7C2D9E,transparent 70%)"
+        <Orb size={420} color="radial-gradient(circle,#8B5CF6,transparent 70%)"
           style={{ top: "10%", right: "-8%" }} delay={2} />
-        <Orb size={300} color="radial-gradient(circle,#C9A84C,transparent 70%)"
+        <Orb size={300} color="radial-gradient(circle,#E11D48,transparent 70%)"
           style={{ bottom: "5%", right: "20%" }} delay={1} />
 
         {/* Film reel accents */}
@@ -300,7 +300,7 @@ export function LandingPage() {
               initial={{ opacity: 0, scale: 0.92, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.1, ease: "easeOut" }}
-              className="relative z-10 rounded-3xl overflow-hidden shadow-[0_40px_100px_rgba(201,168,76,0.15)] border border-primary/20"
+              className="relative z-10 rounded-3xl overflow-hidden shadow-[0_40px_100px_rgba(225,29,72,0.18)] border border-primary/20"
             >
               <img
                 src="https://picsum.photos/seed/cinema/1200/800"
@@ -364,7 +364,7 @@ export function LandingPage() {
 
             {/* Glow under the card */}
             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20
-                            bg-primary/20 blur-3xl rounded-full pointer-events-none" />
+                            bg-primary/25 blur-3xl rounded-full pointer-events-none" />
           </TiltCard>
         </div>
       </section>
@@ -398,7 +398,7 @@ export function LandingPage() {
       {/* ── FEATURES ───────────────────────────────────────────────── */}
       <section className="py-32 px-6 relative">
         {/* Subtle radial bg */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,168,76,0.04)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(225,29,72,0.05)_0%,transparent_70%)] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
@@ -437,7 +437,7 @@ export function LandingPage() {
                                bg-white/[0.03] hover:bg-primary/5
                                transition-all duration-300
                                shadow-[0_4px_24px_rgba(0,0,0,0.4)]
-                               hover:shadow-[0_8px_40px_rgba(201,168,76,0.12)]"
+                               hover:shadow-[0_8px_40px_rgba(225,29,72,0.14)]"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6
                                     group-hover:bg-primary/10 transition-colors
@@ -465,9 +465,9 @@ export function LandingPage() {
       {/* ── FEATURED CASTING CALLS ─────────────────────────────────── */}
       <section className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0d0b18] to-[#080810] pointer-events-none" />
-        <Orb size={400} color="radial-gradient(circle,#7C2D9E,transparent 70%)"
+        <Orb size={400} color="radial-gradient(circle,#8B5CF6,transparent 70%)"
           style={{ top: "20%", left: "-10%" }} delay={3} />
-        <Orb size={350} color="radial-gradient(circle,#C9A84C,transparent 70%)"
+        <Orb size={350} color="radial-gradient(circle,#E11D48,transparent 70%)"
           style={{ bottom: "10%", right: "-8%" }} delay={1} />
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -513,7 +513,7 @@ export function LandingPage() {
                     className="p-0 overflow-hidden group cursor-pointer
                                border border-white/8 hover:border-primary/30
                                transition-all duration-400
-                               hover:shadow-[0_20px_60px_rgba(201,168,76,0.15)]"
+                               hover:shadow-[0_20px_60px_rgba(225,29,72,0.18)]"
                   >
                     <div className="relative h-52 overflow-hidden">
                       <img
@@ -614,7 +614,7 @@ export function LandingPage() {
                                   bg-gradient-to-br from-primary/15 via-primary/8 to-transparent
                                   border border-primary/20
                                   flex items-center justify-center
-                                  shadow-[0_0_40px_rgba(201,168,76,0.08)]">
+                                  shadow-[0_0_40px_rgba(225,29,72,0.10)]">
                     {step.icon}
                   </div>
                 </TiltCard>
@@ -634,7 +634,7 @@ export function LandingPage() {
         {/* Layered 3-D depth background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-[#080810] to-accent/10" />
-          <Orb size={600} color="radial-gradient(circle,#C9A84C,transparent 65%)"
+          <Orb size={600} color="radial-gradient(circle,#E11D48,transparent 65%)"
             style={{ top: "50%", left: "50%", transform: "translate(-50%,-50%)" }} delay={0} />
           {/* Revolving ring */}
           <motion.div
@@ -685,10 +685,10 @@ export function LandingPage() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/signup">
-              <Button size="lg" className="rounded-full px-10 shadow-2xl shadow-primary/30
-                                           bg-primary hover:bg-primary-dark text-black font-bold">
+              <Button size="lg" className="rounded-full px-10 shadow-2xl shadow-primary/40
+                                           bg-primary hover:bg-primary-dark text-white font-bold">
                 Create Actor Profile
-                <Play className="ml-2 h-5 w-5 fill-black" />
+                <Play className="ml-2 h-5 w-5 fill-white" />
               </Button>
             </Link>
             <Link to="/signup">
