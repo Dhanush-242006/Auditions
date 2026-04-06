@@ -138,15 +138,15 @@ export function CastingDirectorDashboard() {
                 <AreaChart data={DATA}>
                   <defs>
                     <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#1D4ED8" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#1D4ED8" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
                   <XAxis dataKey="name" stroke="#ffffff40" fontSize={12} tickLine={false} axisLine={false} />
                   <YAxis stroke="#ffffff40" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
                   <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: "12px" }} itemStyle={{ color: "#fff" }} />
-                  <Area type="monotone" dataKey="views" stroke="#059669" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
+                  <Area type="monotone" dataKey="views" stroke="#1D4ED8" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
