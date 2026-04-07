@@ -23,6 +23,15 @@ import { useLang } from "@/src/lib/i18n";
    CSS KEYFRAMES FOR HUMAN ANIMATIONS
 ══════════════════════════════════════════════════ */
 const HUMAN_CSS = `
+/* ── Background orbs ── */
+@keyframes orb1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.15)}66%{transform:translate(-50px,40px) scale(0.88)}}
+@keyframes orb2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-70px,50px) scale(0.9)}66%{transform:translate(50px,-70px) scale(1.12)}}
+@keyframes orb3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,80px) scale(1.08)}}
+@keyframes auroraShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes gridGlow{0%,100%{opacity:0.035}50%{opacity:0.07}}
+@keyframes filmFrameFloat{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:0.4}100%{transform:translateY(-20vh) rotate(720deg);opacity:0}}
+@keyframes scanLine{0%{top:-2px}100%{top:100%}}
+/* ── Human body ── */
 @keyframes bodyDance{0%,100%{transform:translateY(0) rotate(-1.5deg)}25%{transform:translateY(-14px) rotate(2deg)}50%{transform:translateY(-8px) rotate(-1deg)}75%{transform:translateY(-18px) rotate(2.5deg)}}
 @keyframes bodyDramatic{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-10px) scaleY(1.02)}80%{transform:translateY(-5px) scaleY(0.99)}}
 @keyframes bodyBow{0%,100%{transform:rotate(0deg) translateY(0)}45%,55%{transform:rotate(18deg) translateY(4px)}}
@@ -338,6 +347,90 @@ function FilmStrip({ reverse = false }: { reverse?: boolean }) {
 }
 
 /* ══════════════════════════════════════════════════
+   HERO BACKGROUND — ORBS + GRID + FILM FRAMES
+══════════════════════════════════════════════════ */
+function HeroBackground() {
+  /* seeded positions so they don't shift on re-render */
+  const frames = React.useMemo(() =>
+    Array.from({ length: 10 }).map((_, i) => ({
+      left: `${(i * 37 + 5) % 95}%`,
+      delay: i * 1.4,
+      dur: 12 + (i * 3) % 10,
+      size: 28 + (i * 7) % 28,
+    }))
+  , []);
+
+  return (
+    <>
+      {/* Aurora gradient — animates its background-position */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(125deg, rgba(13,148,136,0.18) 0%, transparent 35%, rgba(139,92,246,0.14) 55%, transparent 70%, rgba(13,148,136,0.10) 100%)",
+          backgroundSize: "300% 300%",
+          animation: "auroraShift 14s ease-in-out infinite",
+        }}
+      />
+
+      {/* Large drifting orbs */}
+      {[
+        { style: { top: "10%",  left: "15%",  width: 520, height: 520, background: "radial-gradient(circle, rgba(13,148,136,0.22) 0%, transparent 70%)", animation: "orb1 18s ease-in-out infinite" } },
+        { style: { top: "25%",  right: "8%",  width: 460, height: 460, background: "radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%)", animation: "orb2 22s ease-in-out infinite" } },
+        { style: { bottom: "5%",left: "38%",  width: 380, height: 380, background: "radial-gradient(circle, rgba(13,148,136,0.14) 0%, transparent 70%)", animation: "orb3 16s ease-in-out infinite" } },
+      ].map((orb, i) => (
+        <div key={i} className="absolute rounded-full pointer-events-none blur-[80px]" style={orb.style} />
+      ))}
+
+      {/* 3-D perspective grid */}
+      <div
+        className="absolute bottom-0 left-0 right-0 pointer-events-none"
+        style={{ height: "55%", perspective: "600px", perspectiveOrigin: "50% 0%" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: "rotateX(72deg)",
+            transformOrigin: "50% 100%",
+            backgroundImage: `
+              linear-gradient(rgba(13,148,136,0.15) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(13,148,136,0.15) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+            animation: "gridGlow 4s ease-in-out infinite",
+            maskImage: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 80%)",
+            WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 80%)",
+          }}
+        />
+      </div>
+
+      {/* Floating film frames */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {frames.map((f, i) => (
+          <div
+            key={i}
+            className="absolute border border-white/10 rounded"
+            style={{
+              left: f.left,
+              bottom: "-60px",
+              width: f.size,
+              height: f.size * 1.4,
+              animation: `filmFrameFloat ${f.dur}s linear infinite ${f.delay}s`,
+              boxShadow: `inset 0 0 12px rgba(13,148,136,0.08)`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* CRT scan line */}
+      <div
+        className="absolute left-0 right-0 pointer-events-none z-10 opacity-[0.025]"
+        style={{ height: 2, background: "rgba(255,255,255,0.9)", animation: "scanLine 8s linear infinite" }}
+      />
+    </>
+  );
+}
+
+/* ══════════════════════════════════════════════════
    SPOTLIGHT BEAM
 ══════════════════════════════════════════════════ */
 function SpotlightBeam({ x, delay = 0, color = "rgba(255,255,255,0.06)" }: {
@@ -454,6 +547,19 @@ function CinematicOpening() {
   );
 }
 
+/* Seeded star data — stable across re-renders */
+const STARS = Array.from({ length: 70 }).map((_, i) => {
+  const seed = i * 2654435761;
+  return {
+    w:     ((seed >> 4)  & 0xf) / 10 + 1,
+    x:     `${((seed >> 8)  & 0xff) / 255 * 100}%`,
+    y:     `${((seed >> 16) & 0xff) / 255 * 60}%`,
+    op:    ((seed >> 24) & 0xf) / 15 * 0.7 + 0.3,
+    dur:   ((seed >> 2)  & 0x7) + 2,
+    delay: ((seed >> 12) & 0xf) / 4,
+  };
+});
+
 /* ══════════════════════════════════════════════════
    MAIN PAGE
 ══════════════════════════════════════════════════ */
@@ -519,32 +625,30 @@ export function LandingPage() {
         className="relative min-h-screen flex flex-col overflow-hidden"
         onMouseMove={handleHeroMouse}
       >
-        {/* Deep background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-neutral-950 via-neutral-950 to-black" />
+        {/* Base background */}
+        <div className="absolute inset-0 bg-[#030712]" />
+
+        {/* Animated hero background */}
+        <HeroBackground />
 
         {/* Spotlight beams */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <SpotlightBeam x="10%"  delay={0}   color="rgba(13,148,136,0.12)" />
-          <SpotlightBeam x="32%"  delay={2}   color="rgba(255,255,255,0.07)" />
-          <SpotlightBeam x="55%"  delay={0.8} color="rgba(139,92,246,0.10)" />
-          <SpotlightBeam x="75%"  delay={3}   color="rgba(255,255,255,0.07)" />
-          <SpotlightBeam x="90%"  delay={1.5} color="rgba(13,148,136,0.10)" />
+          <SpotlightBeam x="10%"  delay={0}   color="rgba(13,148,136,0.14)" />
+          <SpotlightBeam x="32%"  delay={2}   color="rgba(255,255,255,0.08)" />
+          <SpotlightBeam x="55%"  delay={0.8} color="rgba(139,92,246,0.12)" />
+          <SpotlightBeam x="75%"  delay={3}   color="rgba(255,255,255,0.08)" />
+          <SpotlightBeam x="90%"  delay={1.5} color="rgba(13,148,136,0.12)" />
         </div>
 
-        {/* Star particles */}
+        {/* Star particles (seeded to avoid re-render jitter) */}
         <div className="absolute inset-0 pointer-events-none">
-          {Array.from({ length: 60 }).map((_, i) => (
+          {STARS.map((s, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() * 2 + 1,
-                height: Math.random() * 2 + 1,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 60}%`,
-              }}
-              animate={{ opacity: [0.1, 0.8, 0.1] }}
-              transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 4 }}
+              style={{ width: s.w, height: s.w, left: s.x, top: s.y }}
+              animate={{ opacity: [0.08, s.op, 0.08] }}
+              transition={{ duration: s.dur, repeat: Infinity, delay: s.delay, ease: "easeInOut" }}
             />
           ))}
         </div>
@@ -837,59 +941,108 @@ export function LandingPage() {
             <p className="text-white/50 max-w-xl mx-auto">Discover award-winning actors, directors, and crew ready to bring your vision to life.</p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             {[
-              { name: "Priya Sharma",  role: "Lead Actress",  city: "Mumbai",    award: "Filmfare 2024", seed: "person10", Sil: SilhouetteRaisedArm },
-              { name: "Arjun Mehta",   role: "Character Actor",city: "Delhi",    award: "National Award",seed: "person11", Sil: SilhouetteActor     },
-              { name: "Ananya Rao",    role: "Dancer · Actor", city: "Chennai",  award: "IIFA 2024",    seed: "person12", Sil: SilhouetteDancer    },
-              { name: "Vikram Singh",  role: "Director",       city: "Hyderabad",award: "BAFTA Nom.",   seed: "person13", Sil: SilhouetteDirector  },
-              { name: "Kavya Nair",    role: "Cinematographer",city: "Kochi",    award: "Cannes '24",   seed: "person14", Sil: SilhouetteCameraman },
-            ].map(({ name, role, city, award, seed, Sil }, i) => (
+              { name: "Priya Sharma",  role: "Lead Actress",   city: "Mumbai",    award: "Filmfare 2024",  photo: "https://randomuser.me/api/portraits/women/44.jpg",  glowColor: "#0D9488" },
+              { name: "Arjun Mehta",   role: "Character Actor", city: "Delhi",    award: "National Award", photo: "https://randomuser.me/api/portraits/men/32.jpg",    glowColor: "#8b5cf6" },
+              { name: "Ananya Rao",    role: "Dancer · Actor",  city: "Chennai",  award: "IIFA 2024",      photo: "https://randomuser.me/api/portraits/women/60.jpg",  glowColor: "#0D9488" },
+              { name: "Vikram Singh",  role: "Director",        city: "Hyderabad",award: "BAFTA Nom.",     photo: "https://randomuser.me/api/portraits/men/47.jpg",    glowColor: "#f59e0b" },
+              { name: "Kavya Nair",    role: "Cinematographer", city: "Kochi",    award: "Cannes '24",     photo: "https://randomuser.me/api/portraits/women/22.jpg",  glowColor: "#3b82f6" },
+            ].map(({ name, role, city, award, photo, glowColor }, i) => (
               <motion.div
                 key={i}
-                className="group relative rounded-3xl overflow-hidden border border-white/10 cursor-pointer"
-                initial={{ opacity: 0, y: 40 }}
+                className="group relative rounded-3xl overflow-hidden cursor-pointer"
+                style={{ border: `1px solid ${glowColor}22` }}
+                initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -10, scale: 1.03 }}
               >
-                {/* Image */}
-                <div className="aspect-[3/4] relative overflow-hidden">
+                {/* Photo — fills card with face at top */}
+                <div className="aspect-[3/4] relative overflow-hidden bg-neutral-900">
                   <img
-                    src={`https://picsum.photos/seed/${seed}/400/530`}
+                    src={photo}
                     alt={name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
                     referrerPolicy="no-referrer"
                   />
-                  {/* Dark overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
-                  {/* Silhouette overlay on hover */}
+                  {/* Cinematic gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+
+                  {/* Colour rim light on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `linear-gradient(to top, ${glowColor}50 0%, transparent 50%)`,
+                      mixBlendMode: "screen",
+                    }}
+                  />
+
+                  {/* Spotlight shine from top on hover */}
                   <motion.div
-                    className="absolute inset-0 flex items-end justify-center pb-12 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ color: "rgba(13,148,136,0.4)" }}
-                  >
-                    <Sil className="h-24 w-auto drop-shadow-2xl" />
-                  </motion.div>
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: `radial-gradient(ellipse 60% 40% at 50% 0%, ${glowColor}30 0%, transparent 100%)`,
+                    }}
+                  />
 
                   {/* Award badge */}
                   <div className="absolute top-3 left-3">
-                    <div className="glass px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <Award className="h-2.5 w-2.5 text-amber-400" />
-                      <span className="text-[8px] font-bold text-amber-400">{award}</span>
+                    <div className="glass px-2 py-1 rounded-full flex items-center gap-1.5 backdrop-blur-md">
+                      <Award className="h-3 w-3 text-amber-400" />
+                      <span className="text-[9px] font-bold text-amber-400">{award}</span>
                     </div>
+                  </div>
+
+                  {/* Verified dot */}
+                  <div
+                    className="absolute top-3 right-3 w-6 h-6 rounded-full flex items-center justify-center"
+                    style={{ background: glowColor }}
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5 text-white" />
                   </div>
                 </div>
 
-                {/* Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="text-xs font-bold text-white truncate">{name}</p>
-                  <p className="text-[10px] text-primary mt-0.5">{role}</p>
-                  <p className="text-[9px] text-white/40 flex items-center gap-1 mt-1">
-                    <MapPin className="h-2 w-2" />{city}
+                {/* Info panel */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-4"
+                  style={{
+                    background: `linear-gradient(to top, rgba(0,0,0,0.95) 60%, transparent)`,
+                  }}
+                >
+                  {/* Glow line above info */}
+                  <div
+                    className="w-8 h-0.5 mb-2 rounded-full opacity-80"
+                    style={{ background: glowColor }}
+                  />
+                  <p className="text-sm font-bold text-white">{name}</p>
+                  <p className="text-[10px] mt-0.5 font-medium" style={{ color: glowColor }}>{role}</p>
+                  <p className="text-[9px] text-white/40 flex items-center gap-1 mt-1.5">
+                    <MapPin className="h-2.5 w-2.5" />{city}
                   </p>
+
+                  {/* Stats on hover */}
+                  <motion.div
+                    className="flex items-center gap-2 mt-2 overflow-hidden"
+                    initial={{ height: 0, opacity: 0 }}
+                  >
+                    <div
+                      className="text-[8px] font-bold px-1.5 py-0.5 rounded"
+                      style={{ background: `${glowColor}22`, color: glowColor }}
+                    >
+                      ★ 4.9
+                    </div>
+                    <div className="text-[8px] text-white/30">124 auditions</div>
+                  </motion.div>
                 </div>
+
+                {/* Bottom glow under card */}
+                <div
+                  className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+                  style={{ background: glowColor }}
+                />
               </motion.div>
             ))}
           </div>
