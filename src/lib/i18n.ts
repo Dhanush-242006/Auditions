@@ -113,6 +113,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_how_s2_desc:     "AI matches you with the best-fit roles. Apply in one tap.",
     lp_how_s3_title:    "Get Discovered",
     lp_how_s3_desc:     "Casting directors shortlist you. Your career begins here.",
+    lp_how_s4_title:    "Land the Role",
+    lp_how_s4_desc:     "Accept the offer, step on set, and let the world see your talent shine.",
 
     /* Landing — CTA */
     lp_cta_badge:       "Start your journey today",
@@ -124,6 +126,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_trust1:          "No credit card required",
     lp_trust2:          "Free to join",
     lp_trust3:          "Verified listings only",
+    lp_trust4:          "50,000+ Talent",
   },
 
   /* ──────────────────────────── HINDI ──────────────────────────── */
@@ -229,6 +232,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_how_s2_desc:     "AI आपको सबसे उपयुक्त भूमिकाओं से जोड़ती है। एक टैप में आवेदन करें।",
     lp_how_s3_title:    "खोजे जाएं",
     lp_how_s3_desc:     "कास्टिंग डायरेक्टर आपको शॉर्टलिस्ट करते हैं। आपका करियर यहां से शुरू होता है।",
+    lp_how_s4_title:    "भूमिका पाएं",
+    lp_how_s4_desc:     "ऑफर स्वीकार करें, सेट पर कदम रखें, और दुनिया को अपनी प्रतिभा दिखाएं।",
 
     /* Landing — CTA */
     lp_cta_badge:       "आज अपनी यात्रा शुरू करें",
@@ -240,6 +245,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_trust1:          "क्रेडिट कार्ड की जरूरत नहीं",
     lp_trust2:          "मुफ्त में जुड़ें",
     lp_trust3:          "केवल वेरिफाइड लिस्टिंग",
+    lp_trust4:          "50,000+ प्रतिभाएं",
   },
 
   /* ──────────────────────────── TAMIL ──────────────────────────── */
@@ -345,6 +351,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_how_s2_desc:     "AI உங்களுக்கு ஏற்ற பாத்திரங்களை பொருத்துகிறது. ஒரே தட்டலில் விண்ணப்பிக்கவும்.",
     lp_how_s3_title:    "கண்டுபிடிக்கப்படுங்கள்",
     lp_how_s3_desc:     "காஸ்டிங் இயக்குநர்கள் உங்களை தேர்ந்தெடுக்கிறார்கள். உங்கள் வாழ்க்கை இங்கே தொடங்குகிறது.",
+    lp_how_s4_title:    "பாத்திரம் பெறுங்கள்",
+    lp_how_s4_desc:     "சலுகையை ஏற்றுக்கொள்ளுங்கள், செட்டில் கால் வையுங்கள், உங்கள் திறமையை உலகம் பாரட்டட்டும்.",
 
     /* Landing — CTA */
     lp_cta_badge:       "இன்றே உங்கள் பயணத்தைத் தொடங்குங்கள்",
@@ -356,6 +364,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_trust1:          "கிரெடிட் கார்டு தேவையில்லை",
     lp_trust2:          "இலவசமாக சேரலாம்",
     lp_trust3:          "சரிபார்க்கப்பட்ட பட்டியல்கள் மட்டும்",
+    lp_trust4:          "50,000+ திறமையாளர்கள்",
   },
 
   /* ──────────────────────────── TELUGU ──────────────────────────── */
@@ -461,6 +470,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_how_s2_desc:     "AI మీకు అత్యంత అనుకూలమైన పాత్రలను మ్యాచ్ చేస్తుంది. ఒక్క టాప్‌తో దరఖాస్తు చేయండి.",
     lp_how_s3_title:    "గుర్తించబడండి",
     lp_how_s3_desc:     "కాస్టింగ్ డైరెక్టర్లు మిమ్మల్ని షార్ట్‌లిస్ట్ చేస్తారు. మీ కెరీర్ ఇక్కడ మొదలవుతుంది.",
+    lp_how_s4_title:    "పాత్ర సాధించండి",
+    lp_how_s4_desc:     "ఆఫర్ అంగీకరించండి, సెట్‌లో అడుగు పెట్టండి, మీ ప్రతిభను ప్రపంచం చూసేలా చేయండి.",
 
     /* Landing — CTA */
     lp_cta_badge:       "ఈరోజే మీ ప్రయాణం ప్రారంభించండి",
@@ -472,6 +483,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     lp_trust1:          "క్రెడిట్ కార్డు అవసరం లేదు",
     lp_trust2:          "ఉచితంగా చేరండి",
     lp_trust3:          "ధృవీకరించిన జాబితాలు మాత్రమే",
+    lp_trust4:          "50,000+ ప్రతిభావంతులు",
   },
 };
 
