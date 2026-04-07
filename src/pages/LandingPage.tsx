@@ -20,8 +20,210 @@ import { Link } from "react-router-dom";
 import { useLang } from "@/src/lib/i18n";
 
 /* ══════════════════════════════════════════════════
-   SVG SILHOUETTE CHARACTERS
+   CSS KEYFRAMES FOR HUMAN ANIMATIONS
 ══════════════════════════════════════════════════ */
+const HUMAN_CSS = `
+@keyframes bodyDance{0%,100%{transform:translateY(0) rotate(-1.5deg)}25%{transform:translateY(-14px) rotate(2deg)}50%{transform:translateY(-8px) rotate(-1deg)}75%{transform:translateY(-18px) rotate(2.5deg)}}
+@keyframes bodyDramatic{0%,100%{transform:translateY(0) scaleY(1)}40%{transform:translateY(-10px) scaleY(1.02)}80%{transform:translateY(-5px) scaleY(0.99)}}
+@keyframes bodyBow{0%,100%{transform:rotate(0deg) translateY(0)}45%,55%{transform:rotate(18deg) translateY(4px)}}
+@keyframes bodyExcite{0%,100%{transform:translateY(0) scaleX(1)}50%{transform:translateY(-16px) scaleX(0.97)}}
+@keyframes bodySway{0%,100%{transform:translateX(0) rotate(-1deg)}50%{transform:translateX(4px) rotate(1deg)}}
+@keyframes armLDance{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(25deg)}}
+@keyframes armRDance{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-25deg)}}
+@keyframes armLDramatic{0%,100%{transform:rotate(50deg)}50%{transform:rotate(60deg)}}
+@keyframes armRDramatic{0%,100%{transform:rotate(-50deg)}50%{transform:rotate(-60deg)}}
+@keyframes armLBow{0%,100%{transform:rotate(-10deg)}45%,55%{transform:rotate(30deg)}}
+@keyframes armRBow{0%,100%{transform:rotate(10deg)}45%,55%{transform:rotate(-30deg)}}
+@keyframes armLExcite{0%,100%{transform:rotate(-85deg)}50%{transform:rotate(-65deg)}}
+@keyframes armRExcite{0%,100%{transform:rotate(85deg)}50%{transform:rotate(65deg)}}
+@keyframes armLSway{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(10deg)}}
+@keyframes armRSway{0%,100%{transform:rotate(15deg)}50%{transform:rotate(-10deg)}}
+@keyframes legLDance{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(12deg)}}
+@keyframes legRDance{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-12deg)}}
+@keyframes legLStep{0%,100%{transform:rotate(0deg)}50%{transform:rotate(14deg)}}
+@keyframes legRStep{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-14deg)}}
+@keyframes headNod{0%,100%{transform:rotate(0deg)}30%{transform:rotate(-6deg)}70%{transform:rotate(4deg)}}
+@keyframes headBob{0%,100%{transform:rotate(0deg) scaleX(1)}50%{transform:rotate(0deg) scaleX(1)}}
+@keyframes shadowPulse{0%,100%{transform:scaleX(1);opacity:0.35}50%{transform:scaleX(0.85);opacity:0.2}}
+`;
+
+interface HumanProps {
+  skin: string;
+  hair: string;
+  topColor: string;
+  bottomColor: string;
+  shoeColor?: string;
+  action: "dance"|"dramatic"|"bow"|"excite"|"sway";
+  delay?: number;
+  height?: number;
+  /** extra SVG to render as a prop (microphone, megaphone, etc.) */
+  prop?: React.ReactNode;
+}
+
+function AnimatedHuman({ skin, hair, topColor, bottomColor, shoeColor = "#222", action, delay = 0, height = 220, prop }: HumanProps) {
+  const d = delay;
+  const dur: Record<string, string> = {
+    dance:    "1.4s",
+    dramatic: "2.8s",
+    bow:      "3.5s",
+    excite:   "0.85s",
+    sway:     "2.2s",
+  };
+  const t = dur[action];
+
+  const bodyAnim    = `body${action.charAt(0).toUpperCase()+action.slice(1)} ${t} ease-in-out infinite ${d}s`;
+  const armLAnim    = `armL${action.charAt(0).toUpperCase()+action.slice(1)} ${t} ease-in-out infinite ${d}s`;
+  const armRAnim    = `armR${action.charAt(0).toUpperCase()+action.slice(1)} ${t} ease-in-out infinite ${d}s`;
+  const legLAnim    = action === "dance" ? `legLDance ${t} ease-in-out infinite ${d}s` : `legLStep 1.8s ease-in-out infinite ${d}s`;
+  const legRAnim    = action === "dance" ? `legRDance ${t} ease-in-out infinite ${d + 0.3}s` : `legRStep 1.8s ease-in-out infinite ${d + 0.4}s`;
+  const headAnim    = `headNod 2s ease-in-out infinite ${d}s`;
+  const shadowAnim  = `shadowPulse ${t} ease-in-out infinite ${d}s`;
+
+  const w = height * (100 / 250);
+
+  return (
+    <svg
+      viewBox="0 0 100 250"
+      style={{ width: w, height, overflow: "visible" }}
+    >
+      {/* Ground shadow */}
+      <ellipse cx="50" cy="246" rx="26" ry="5"
+        fill="rgba(0,0,0,0.4)"
+        style={{ animation: shadowAnim, transformOrigin: "50px 246px" }}
+      />
+
+      {/* Whole-body group */}
+      <g style={{ animation: bodyAnim, transformOrigin: "50px 240px" }}>
+
+        {/* ── RIGHT LEG (behind) ── */}
+        <g style={{ animation: legRAnim, transformOrigin: "58px 148px" }}>
+          {/* thigh */}
+          <rect x="50" y="148" width="16" height="42" rx="8" fill={skin} />
+          {/* knee highlight */}
+          <ellipse cx="58" cy="192" rx="8" ry="7" fill={skin} />
+          {/* shin */}
+          <rect x="51" y="190" width="14" height="36" rx="7" fill={skin} />
+          {/* shoe */}
+          <ellipse cx="60" cy="228" rx="13" ry="6" fill={shoeColor} />
+          <ellipse cx="55" cy="226" rx="9" ry="4" fill={shoeColor} />
+        </g>
+
+        {/* ── LEFT LEG (front) ── */}
+        <g style={{ animation: legLAnim, transformOrigin: "42px 148px" }}>
+          <rect x="34" y="148" width="16" height="42" rx="8" fill={skin} />
+          <ellipse cx="42" cy="192" rx="8" ry="7" fill={skin} />
+          <rect x="35" y="190" width="14" height="36" rx="7" fill={skin} />
+          <ellipse cx="40" cy="228" rx="13" ry="6" fill={shoeColor} />
+          <ellipse cx="45" cy="226" rx="9" ry="4" fill={shoeColor} />
+        </g>
+
+        {/* ── BOTTOM CLOTHING ── */}
+        <path d="M28 140 Q34 152 42 148 L50 148 L58 148 Q66 152 72 140 Z"
+          fill={bottomColor} opacity="0.95"
+        />
+        {/* trouser/skirt seam */}
+        <line x1="50" y1="148" x2="50" y2="140" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" />
+
+        {/* ── TORSO ── */}
+        {/* Body shape */}
+        <path d="M26 70 Q24 90 25 115 Q26 135 28 142 L72 142 Q74 135 75 115 Q76 90 74 70 Z"
+          fill={topColor}
+        />
+        {/* Collar / neckline detail */}
+        <path d="M38 70 Q50 82 62 70"
+          stroke="rgba(255,255,255,0.25)" strokeWidth="2" fill="none"
+        />
+        {/* Shirt shadow shading */}
+        <path d="M26 70 Q24 90 25 115 Q26 130 28 142 L38 142 L38 70 Z"
+          fill="rgba(0,0,0,0.08)"
+        />
+
+        {/* ── RIGHT ARM (behind torso) ── */}
+        <g style={{ animation: armRAnim, transformOrigin: "72px 76px" }}>
+          {/* upper arm */}
+          <rect x="68" y="76" width="13" height="36" rx="6.5" fill={skin} />
+          {/* elbow */}
+          <ellipse cx="74.5" cy="114" rx="6.5" ry="6" fill={skin} />
+          {/* forearm */}
+          <rect x="69" y="112" width="12" height="30" rx="6" fill={skin} />
+          {/* hand */}
+          <ellipse cx="75" cy="144" rx="7" ry="6" fill={skin} />
+          {/* sleeve */}
+          <rect x="68" y="76" width="13" height="22" rx="6.5" fill={topColor} opacity="0.7" />
+        </g>
+
+        {/* ── LEFT ARM (in front of torso) ── */}
+        <g style={{ animation: armLAnim, transformOrigin: "28px 76px" }}>
+          <rect x="19" y="76" width="13" height="36" rx="6.5" fill={skin} />
+          <ellipse cx="25.5" cy="114" rx="6.5" ry="6" fill={skin} />
+          <rect x="20" y="112" width="12" height="30" rx="6" fill={skin} />
+          {/* prop attachment point */}
+          {prop && <g transform="translate(10, 135)">{prop}</g>}
+          <ellipse cx="26" cy="144" rx="7" ry="6" fill={skin} />
+          <rect x="19" y="76" width="13" height="22" rx="6.5" fill={topColor} opacity="0.7" />
+        </g>
+
+        {/* ── NECK ── */}
+        <rect x="43" y="54" width="14" height="20" rx="6" fill={skin} />
+
+        {/* ── HEAD ── */}
+        <g style={{ animation: headAnim, transformOrigin: "50px 35px" }}>
+          {/* Hair back */}
+          <ellipse cx="50" cy="32" rx="20" ry="22" fill={hair} />
+
+          {/* Face */}
+          <ellipse cx="50" cy="34" rx="18" ry="20" fill={skin} />
+
+          {/* Hair front / top */}
+          <path d={
+            hair === "#1a0800"
+              ? "M30 28 Q32 12 50 10 Q68 12 70 28 Q65 18 50 17 Q35 18 30 28 Z"
+              : hair === "#f5c842"
+              ? "M30 26 Q34 8 50 8 Q66 8 70 26 Q64 16 50 15 Q36 16 30 26 Z"
+              : "M30 28 Q33 10 50 10 Q67 10 70 28 Q64 16 50 15 Q36 16 30 28 Z"
+          } fill={hair} />
+
+          {/* Ear left */}
+          <ellipse cx="32" cy="36" rx="4" ry="6" fill={skin} />
+          {/* Ear right */}
+          <ellipse cx="68" cy="36" rx="4" ry="6" fill={skin} />
+
+          {/* Eyebrows */}
+          <path d="M38 25 Q43 22 47 25" stroke={hair} strokeWidth="2" fill="none" strokeLinecap="round" />
+          <path d="M53 25 Q57 22 62 25" stroke={hair} strokeWidth="2" fill="none" strokeLinecap="round" />
+
+          {/* Eyes */}
+          <ellipse cx="42" cy="31" rx="4.5" ry="5" fill="white" />
+          <ellipse cx="58" cy="31" rx="4.5" ry="5" fill="white" />
+          <ellipse cx="43" cy="32" rx="3" ry="3.5" fill="#2c1810" />
+          <ellipse cx="59" cy="32" rx="3" ry="3.5" fill="#2c1810" />
+          <ellipse cx="43.5" cy="30.5" rx="1" ry="1.2" fill="rgba(255,255,255,0.7)" />
+          <ellipse cx="59.5" cy="30.5" rx="1" ry="1.2" fill="rgba(255,255,255,0.7)" />
+
+          {/* Nose */}
+          <path d="M47 38 Q50 43 53 38" stroke="rgba(0,0,0,0.2)" strokeWidth="1.5" fill="none" />
+          {/* Nostrils */}
+          <ellipse cx="47.5" cy="40" rx="2" ry="1.2" fill="rgba(0,0,0,0.12)" />
+          <ellipse cx="52.5" cy="40" rx="2" ry="1.2" fill="rgba(0,0,0,0.12)" />
+
+          {/* Mouth */}
+          <path d="M43 47 Q50 53 57 47"
+            stroke="#8b4513" strokeWidth="2" fill="none" strokeLinecap="round"
+          />
+          {/* Lip */}
+          <path d="M44 47 Q50 50 56 47" fill="rgba(180,90,60,0.3)" />
+
+          {/* Cheek blush */}
+          <ellipse cx="37" cy="40" rx="5" ry="3" fill="rgba(220,100,80,0.12)" />
+          <ellipse cx="63" cy="40" rx="5" ry="3" fill="rgba(220,100,80,0.12)" />
+        </g>
+
+      </g>
+    </svg>
+  );
+}
+
+/* Simple silhouette kept for CTA bottom decoration */
 function SilhouetteActor({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 70 160" className={className} fill="currentColor">
@@ -34,68 +236,55 @@ function SilhouetteActor({ className = "" }: { className?: string }) {
     </svg>
   );
 }
-
 function SilhouetteRaisedArm({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 70 160" className={className} fill="currentColor">
       <ellipse cx="35" cy="17" rx="13" ry="15" />
       <path d="M22 32 C18 36 16 50 15 68 C14 78 16 94 15 108 L55 108 C54 94 56 78 55 68 C54 50 52 36 48 32 Z" />
-      {/* left arm raised triumphantly */}
       <path d="M22 36 C16 24 8 10 2 2 C6 -1 12 0 14 3 C20 11 24 25 28 38 Z" />
-      {/* right arm at side */}
       <path d="M48 36 C56 44 64 58 68 76 C64 79 58 78 56 76 C52 61 48 50 44 44 Z" />
       <path d="M15 108 L9 155 L26 155 L32 118 Z" />
       <path d="M55 108 L61 155 L44 155 L38 118 Z" />
     </svg>
   );
 }
-
+function SilhouetteDancer({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 160" className={className} fill="currentColor">
+      <ellipse cx="38" cy="17" rx="13" ry="15" />
+      <path d="M25 32 C21 36 19 50 18 68 C17 78 19 94 18 108 L58 108 C57 94 59 78 58 68 C57 50 55 36 51 32 Z" />
+      <path d="M25 36 C14 28 4 18 -2 8 C2 4 8 5 10 8 C17 18 22 28 28 38 Z" />
+      <path d="M51 36 C62 28 72 18 78 8 C74 4 68 5 66 8 C59 18 54 28 48 38 Z" />
+      <path d="M18 108 L10 155 L26 155 L30 118 Z" />
+      <path d="M58 108 L70 148 L55 153 L50 118 Z" />
+    </svg>
+  );
+}
 function SilhouetteDirector({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 90 160" className={className} fill="currentColor">
       <ellipse cx="45" cy="17" rx="13" ry="15" />
       <path d="M32 32 C28 36 26 50 25 68 C24 78 26 94 25 108 L65 108 C64 94 66 78 65 68 C64 50 62 36 58 32 Z" />
-      {/* both arms forward - director pose */}
       <path d="M32 36 C22 40 10 44 2 48 C1 53 6 56 9 54 C18 50 28 46 34 42 Z" />
       <path d="M58 36 C68 40 78 44 86 50 C87 55 82 57 79 55 C70 50 60 46 56 42 Z" />
-      {/* megaphone */}
       <path d="M79 44 L90 38 L90 62 L79 56 Z" opacity="0.8" />
       <path d="M15 108 L9 155 L26 155 L32 118 Z" />
       <path d="M65 108 L71 155 L54 155 L48 118 Z" />
     </svg>
   );
 }
-
 function SilhouetteCameraman({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 90 160" className={className} fill="currentColor">
       <ellipse cx="42" cy="17" rx="13" ry="15" />
       <path d="M29 32 C25 36 23 50 22 68 C21 78 23 94 22 108 L62 108 C61 94 63 78 62 68 C61 50 59 36 55 32 Z" />
-      {/* arms holding camera */}
       <path d="M29 38 C20 42 12 48 6 55 L6 70 L22 70 Z" />
       <path d="M55 38 C64 42 72 48 78 55 L78 70 L62 70 Z" />
-      {/* camera body */}
       <rect x="4" y="52" width="36" height="21" rx="4" />
       <circle cx="22" cy="62" r="8" />
-      <circle cx="22" cy="62" r="4" opacity="0.4" />
       <rect x="35" y="55" width="10" height="8" rx="2" />
       <path d="M22 108 L16 155 L32 155 L36 118 Z" />
       <path d="M62 108 L68 155 L52 155 L48 118 Z" />
-    </svg>
-  );
-}
-
-function SilhouetteDancer({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 80 160" className={className} fill="currentColor">
-      <ellipse cx="38" cy="17" rx="13" ry="15" />
-      <path d="M25 32 C21 36 19 50 18 68 C17 78 19 94 18 108 L58 108 C57 94 59 78 58 68 C57 50 55 36 51 32 Z" />
-      {/* both arms raised out - dancer */}
-      <path d="M25 36 C14 28 4 18 -2 8 C2 4 8 5 10 8 C17 18 22 28 28 38 Z" />
-      <path d="M51 36 C62 28 72 18 78 8 C74 4 68 5 66 8 C59 18 54 28 48 38 Z" />
-      {/* dynamic legs - mid step */}
-      <path d="M18 108 L10 155 L26 155 L30 118 Z" />
-      <path d="M58 108 L70 148 L55 153 L50 118 Z" />
     </svg>
   );
 }
@@ -303,16 +492,22 @@ export function LandingPage() {
     heroMouseY.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
-  const ACTORS = [
-    { Comp: SilhouetteRaisedArm, x: "12%",  delay: 0,   h: 200, glow: "#0D9488" },
-    { Comp: SilhouetteActor,     x: "30%",  delay: 0.15, h: 240, glow: "#8b5cf6" },
-    { Comp: SilhouetteDancer,    x: "50%",  delay: 0.3,  h: 260, glow: "#0D9488" },
-    { Comp: SilhouetteDirector,  x: "68%",  delay: 0.45, h: 220, glow: "#f59e0b" },
-    { Comp: SilhouetteCameraman, x: "84%",  delay: 0.6,  h: 210, glow: "#3b82f6" },
+  const ACTORS: Array<{
+    x: string; delay: number; h: number; glow: string;
+    skin: string; hair: string; topColor: string; bottomColor: string; shoeColor?: string;
+    action: "dance"|"dramatic"|"bow"|"excite"|"sway";
+    label: string;
+  }> = [
+    { x: "11%",  delay: 0,    h: 185, glow: "#0D9488", skin: "#c68642", hair: "#1a0800", topColor: "#e11d48",  bottomColor: "#831843", action: "dance",    label: "Actress" },
+    { x: "28%",  delay: 0.2,  h: 215, glow: "#8b5cf6", skin: "#8d5524", hair: "#0d0600", topColor: "#1e1b4b",  bottomColor: "#312e81", action: "dramatic", label: "Lead Actor" },
+    { x: "50%",  delay: 0.0,  h: 235, glow: "#0D9488", skin: "#d4a574", hair: "#3d1c02", topColor: "#0891b2",  bottomColor: "#065f7a", action: "excite",   label: "Dancer" },
+    { x: "70%",  delay: 0.35, h: 200, glow: "#f59e0b", skin: "#6b3a1f", hair: "#1a0800", topColor: "#78350f",  bottomColor: "#451a03", action: "bow",      label: "Director" },
+    { x: "87%",  delay: 0.5,  h: 190, glow: "#3b82f6", skin: "#b07d3a", hair: "#0d0600", topColor: "#166534",  bottomColor: "#052e16", action: "sway",     label: "Newcomer" },
   ];
 
   return (
     <div className="min-h-screen bg-neutral-950 overflow-x-hidden">
+      <style>{HUMAN_CSS}</style>
       <FilmGrain />
       <CinematicOpening />
       <Navbar />
@@ -472,8 +667,8 @@ export function LandingPage() {
                 ))}
               </div>
 
-              {/* Per-actor spotlights + silhouettes */}
-              {ACTORS.map(({ Comp, x, delay, h, glow }, i) => (
+              {/* Per-actor spotlights + animated humans */}
+              {ACTORS.map(({ x, delay, h, glow, skin, hair, topColor, bottomColor, shoeColor, action, label }, i) => (
                 <motion.div
                   key={i}
                   className="absolute bottom-0 flex flex-col items-center"
@@ -482,39 +677,50 @@ export function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.9, delay: 1.0 + delay, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {/* Spotlight on floor */}
+                  {/* Spotlight pool on floor */}
                   <div
-                    className="absolute bottom-0 rounded-full"
+                    className="absolute bottom-0 rounded-full pointer-events-none"
                     style={{
-                      width: h * 0.7,
-                      height: 24,
-                      background: `radial-gradient(ellipse, ${glow}55 0%, transparent 70%)`,
-                      transform: "translateX(-50%)",
+                      width: h * 0.85,
+                      height: 28,
                       left: "50%",
+                      transform: "translateX(-50%)",
+                      background: `radial-gradient(ellipse, ${glow}60 0%, transparent 70%)`,
                     }}
                   />
                   {/* Spotlight cone from top */}
                   <div
                     className="absolute pointer-events-none"
                     style={{
-                      top: -120,
+                      top: -110,
                       left: "50%",
                       transform: "translateX(-50%)",
-                      width: 80,
-                      height: h + 140,
-                      background: `linear-gradient(to bottom, ${glow}30, ${glow}08, transparent)`,
-                      clipPath: "polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%)",
+                      width: 90,
+                      height: h + 130,
+                      background: `linear-gradient(to bottom, ${glow}28, ${glow}07, transparent)`,
+                      clipPath: "polygon(38% 0%, 62% 0%, 100% 100%, 0% 100%)",
                     }}
                   />
-                  {/* Silhouette */}
-                  <motion.div
-                    animate={{ y: [0, -4, 0] }}
-                    transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                    style={{ height: h, color: glow + "cc" }}
-                    className="relative z-10 drop-shadow-2xl"
+                  {/* Animated human */}
+                  <div className="relative z-10" style={{ filter: `drop-shadow(0 8px 24px ${glow}55)` }}>
+                    <AnimatedHuman
+                      skin={skin}
+                      hair={hair}
+                      topColor={topColor}
+                      bottomColor={bottomColor}
+                      shoeColor={shoeColor}
+                      action={action}
+                      delay={delay}
+                      height={h}
+                    />
+                  </div>
+                  {/* Name tag */}
+                  <div
+                    className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] font-bold uppercase tracking-widest whitespace-nowrap px-2 py-0.5 rounded-full"
+                    style={{ color: glow, background: `${glow}18`, border: `1px solid ${glow}30` }}
                   >
-                    <Comp className="h-full w-auto" />
-                  </motion.div>
+                    {label}
+                  </div>
                 </motion.div>
               ))}
 
