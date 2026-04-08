@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, MapPin, Filter, Grid, List, Bookmark, BookmarkCheck, CheckCircle2, Info, ArrowRight, X, Zap, Users, Star, FileText, Check, CalendarClock } from "lucide-react";
+import { Search, MapPin, Filter, Grid, List, Bookmark, BookmarkCheck, CheckCircle2, Info, ArrowRight, X, Zap, Users, Star, FileText, Check, CalendarClock, Link as LinkIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
@@ -46,6 +46,8 @@ export function AuditionListingsPage() {
   const [notification, setNotification] = React.useState<{ message: string; type: 'success' | 'info' } | null>(null);
   const [auditionSlots, setAuditionSlots] = React.useState<AuditionSlot[]>([]);
   const [bookedSlotId, setBookedSlotId] = React.useState<string | null>(null);
+  const [driveLink, setDriveLink] = React.useState("");
+  const [driveLinkError, setDriveLinkError] = React.useState("");
 
   // Filter states
   const [selectedCategories, setSelectedCategories] = React.useState<Set<string>>(new Set());
@@ -69,6 +71,8 @@ export function AuditionListingsPage() {
     if (selectedAudition) {
       setAuditionSlots(getSlots(selectedAudition.id));
       setBookedSlotId(null);
+      setDriveLink("");
+      setDriveLinkError("");
     }
   }, [selectedAudition]);
 
@@ -111,12 +115,21 @@ export function AuditionListingsPage() {
   };
 
   const handleConfirmApplication = () => {
-    if (selectedAudition && !appliedIds.has(selectedAudition.id)) {
-      addTalentApplication(selectedAudition);
-      setAppliedIds((prev) => new Set(prev).add(selectedAudition.id));
-      showNotification('Application submitted successfully!', 'success');
-      setIsApplyModalOpen(false);
+    if (!selectedAudition || appliedIds.has(selectedAudition.id)) return;
+    // Validate drive link if provided
+    if (driveLink.trim()) {
+      const isValidUrl = /^https?:\/\/.+/.test(driveLink.trim());
+      if (!isValidUrl) {
+        setDriveLinkError("Please enter a valid URL (e.g. https://drive.google.com/...)");
+        return;
+      }
     }
+    setDriveLinkError("");
+    addTalentApplication(selectedAudition);
+    setAppliedIds((prev) => new Set(prev).add(selectedAudition.id));
+    showNotification('Application submitted successfully!', 'success');
+    setDriveLink("");
+    setIsApplyModalOpen(false);
   };
 
   const toggleCategory = (category: string) => {
@@ -623,9 +636,45 @@ export function AuditionListingsPage() {
               </Button>
             </div>
 
-            <div className="flex items-center gap-4 pt-6 border-t border-white/10">
-              <Button 
-                variant="outline" 
+            {/* Drive link input */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-white/50 uppercase tracking-wider flex items-center gap-1.5">
+                <LinkIcon className="h-3 w-3" />
+                Audition Drive Link
+                <span className="text-white/25 font-normal normal-case tracking-normal">(optional)</span>
+              </label>
+              <div className="relative">
+                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30 pointer-events-none" />
+                <input
+                  type="url"
+                  value={driveLink}
+                  onChange={e => { setDriveLink(e.target.value); setDriveLinkError(""); }}
+                  placeholder="https://drive.google.com/file/your-audition..."
+                  className={cn(
+                    "w-full bg-white/5 border rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/25",
+                    "focus:outline-none focus:ring-1 transition-colors",
+                    driveLinkError
+                      ? "border-red-500/60 focus:ring-red-500/40"
+                      : "border-white/10 focus:border-primary/50 focus:ring-primary/20"
+                  )}
+                />
+              </div>
+              {driveLinkError && (
+                <p className="text-xs text-red-400 flex items-center gap-1">
+                  <X className="h-3 w-3" /> {driveLinkError}
+                </p>
+              )}
+              {driveLink && !driveLinkError && (
+                <p className="text-xs text-emerald-400 flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> Link will be submitted with your application
+                </p>
+              )}
+              <p className="text-[11px] text-white/20">Paste your Google Drive, Dropbox or any cloud link to your audition video.</p>
+            </div>
+
+            <div className="flex items-center gap-4 pt-2 border-t border-white/10">
+              <Button
+                variant="outline"
                 className={cn(
                   "flex-1 rounded-xl bg-white/5 border-white/20 text-white hover:bg-white/10",
                   bookmarkedIds.has(selectedAudition.id) && "border-primary/50 text-primary"
