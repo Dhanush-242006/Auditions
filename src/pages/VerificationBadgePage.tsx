@@ -40,6 +40,9 @@ const STEPS = [
     title: "Identity Verification",
     desc: "Upload a government-issued photo ID (Aadhaar, PAN, Passport)",
     status: "completed",
+    uploadLabel: "Re-upload ID",
+    accept: "image/*,.pdf",
+    hint: "Aadhaar, PAN, Passport — JPG, PNG or PDF",
   },
   {
     id: "selfie",
@@ -47,6 +50,9 @@ const STEPS = [
     title: "Selfie Check",
     desc: "Take a selfie to match with your ID document",
     status: "completed",
+    uploadLabel: "Re-upload Selfie",
+    accept: "image/*",
+    hint: "Clear face photo — JPG or PNG",
   },
   {
     id: "portfolio",
@@ -54,6 +60,9 @@ const STEPS = [
     title: "Portfolio Review",
     desc: "Our team reviews your profile, headshots, and reels",
     status: "in_progress",
+    uploadLabel: "Upload Portfolio",
+    accept: "image/*,.pdf,.mp4,.mov",
+    hint: "Headshots, showreel or resume — JPG, PDF, MP4",
   },
   {
     id: "professional",
@@ -61,6 +70,9 @@ const STEPS = [
     title: "Professional Check",
     desc: "Verify your union membership or professional credits (optional)",
     status: "pending",
+    uploadLabel: "Upload Documents",
+    accept: "image/*,.pdf",
+    hint: "Union card, guild membership or credits — JPG or PDF",
   },
 ];
 
@@ -105,18 +117,39 @@ const stepStatus = (s: string) => {
   return <Badge className="bg-white/10 text-white/40 border-white/10 text-xs">Pending</Badge>;
 };
 
+// Per-step upload state
+interface StepUpload {
+  uploading: boolean;
+  fileName: string | null;
+}
+
 export function VerificationBadgePage() {
-  const [uploading, setUploading] = React.useState(false);
-  const [uploaded, setUploaded] = React.useState(false);
+  const [stepUploads, setStepUploads] = React.useState<Record<string, StepUpload>>(() =>
+    Object.fromEntries(STEPS.map(s => [s.id, { uploading: false, fileName: null }]))
+  );
   const [skillBadges, setSkillBadges] = React.useState<SkillBadge[]>(() => getSkillBadges());
   const [customSkill, setCustomSkill] = React.useState("");
   const [uploadingSkillId, setUploadingSkillId] = React.useState<string | null>(null);
+  const stepFileInputRef = React.useRef<HTMLInputElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [pendingSkillId, setPendingSkillId] = React.useState<string | null>(null);
+  const [pendingStepId, setPendingStepId] = React.useState<string | null>(null);
+  const [pendingAccept, setPendingAccept] = React.useState<string>("*");
 
-  const handleUpload = () => {
-    setUploading(true);
-    setTimeout(() => { setUploading(false); setUploaded(true); }, 1800);
+  const handleStepUpload = (stepId: string, file: File) => {
+    setStepUploads(prev => ({ ...prev, [stepId]: { uploading: true, fileName: null } }));
+    setTimeout(() => {
+      setStepUploads(prev => ({ ...prev, [stepId]: { uploading: false, fileName: file.name } }));
+    }, 1600);
+  };
+
+  const triggerStepUpload = (stepId: string, accept: string) => {
+    setPendingStepId(stepId);
+    setPendingAccept(accept);
+    if (stepFileInputRef.current) {
+      stepFileInputRef.current.accept = accept;
+      stepFileInputRef.current.click();
+    }
   };
 
   const addSkill = (skill: string) => {
@@ -194,49 +227,79 @@ export function VerificationBadgePage() {
           {/* Verification Steps */}
           <div className="min-w-0">
             <h2 className="font-semibold text-white/60 text-xs uppercase tracking-wider mb-4">Verification Steps</h2>
+
+            {/* Hidden shared file input for step uploads */}
+            <input
+              ref={stepFileInputRef}
+              type="file"
+              className="hidden"
+              accept={pendingAccept}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file && pendingStepId) handleStepUpload(pendingStepId, file);
+                e.target.value = "";
+              }}
+            />
+
             <div className="space-y-3">
-              {STEPS.map((step, i) => (
-                <motion.div
-                  key={step.id}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07 }}
-                >
-                  <Card className={cn("p-4 min-w-0", step.status === "in_progress" && "border-primary/30 bg-primary/5")}>
-                    <div className="flex items-start gap-3 min-w-0">
-                      <div className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                        step.status === "completed" ? "bg-emerald-500/20 text-emerald-400"
-                          : step.status === "in_progress" ? "bg-primary/20 text-primary"
-                            : "bg-white/10 text-white/30"
-                      )}>
-                        {step.status === "completed" ? <CheckCircle2 className="h-5 w-5" /> : step.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2 flex-wrap">
-                          <p className="font-semibold text-sm min-w-0">{step.title}</p>
-                          {stepStatus(step.status)}
+              {STEPS.map((step, i) => {
+                const su = stepUploads[step.id];
+                return (
+                  <motion.div
+                    key={step.id}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.07 }}
+                  >
+                    <Card className={cn("p-4 min-w-0", step.status === "in_progress" && "border-primary/30 bg-primary/5")}>
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className={cn(
+                          "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                          step.status === "completed" ? "bg-emerald-500/20 text-emerald-400"
+                            : step.status === "in_progress" ? "bg-primary/20 text-primary"
+                              : "bg-white/10 text-white/30"
+                        )}>
+                          {step.status === "completed" ? <CheckCircle2 className="h-5 w-5" /> : step.icon}
                         </div>
-                        <p className="text-white/40 text-xs mt-0.5">{step.desc}</p>
-                        {step.status === "pending" && (
-                          <div className="mt-3">
-                            {step.id === "professional" && !uploaded && (
-                              <Button size="sm" variant="primary" onClick={handleUpload} disabled={uploading} className="text-xs gap-1">
-                                {uploading ? <><Loader2 className="h-3 w-3 animate-spin" /> Uploading...</> : <><Upload className="h-3 w-3" /> Upload Documents</>}
-                              </Button>
-                            )}
-                            {uploaded && step.id === "professional" && (
-                              <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/20 text-xs">
-                                <CheckCircle2 className="h-3 w-3 mr-1" /> Documents Uploaded
-                              </Badge>
-                            )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <p className="font-semibold text-sm min-w-0">{step.title}</p>
+                            {stepStatus(step.status)}
                           </div>
-                        )}
+                          <p className="text-white/40 text-xs mt-0.5">{step.desc}</p>
+
+                          {/* Upload area — shown for every step */}
+                          <div className="mt-3 space-y-2">
+                            {/* Uploaded file name */}
+                            {su.fileName && (
+                              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
+                                <CheckCircle2 className="h-3 w-3 shrink-0" />
+                                <span className="truncate">{su.fileName}</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <Button
+                                size="sm"
+                                variant={step.status === "completed" ? "ghost" : "primary"}
+                                disabled={su.uploading}
+                                onClick={() => triggerStepUpload(step.id, step.accept)}
+                                className="text-xs gap-1.5 h-7"
+                              >
+                                {su.uploading
+                                  ? <><Loader2 className="h-3 w-3 animate-spin" /> Uploading…</>
+                                  : <><Upload className="h-3 w-3" /> {su.fileName ? "Re-upload" : step.uploadLabel}</>
+                                }
+                              </Button>
+                              <span className="text-[10px] text-white/25 hidden sm:inline">{step.hint}</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
