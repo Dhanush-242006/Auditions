@@ -25,6 +25,9 @@ import {
   Download,
   X as XIcon,
   Printer,
+  Trophy,
+  Quote,
+  Medal,
 } from "lucide-react";
 import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
@@ -357,11 +360,12 @@ export function ProfilePage() {
           {/* Right Column: Portfolio & Experience */}
           <div className="lg:col-span-2 space-y-8">
             <div className="flex items-center justify-between">
-              <Tabs 
+              <Tabs
                 tabs={[
-                  { id: "portfolio", label: "Portfolio", icon: <ImageIcon className="h-4 w-4" /> },
-                  { id: "experience", label: "Experience", icon: <Calendar className="h-4 w-4" /> },
-                  { id: "reviews", label: "Reviews", icon: <CheckCircle2 className="h-4 w-4" /> },
+                  { id: "portfolio",       label: "Portfolio",       icon: <ImageIcon className="h-4 w-4" /> },
+                  { id: "experience",      label: "Experience",      icon: <Calendar  className="h-4 w-4" /> },
+                  { id: "recommendations", label: "Recommendations", icon: <Quote     className="h-4 w-4" /> },
+                  { id: "achievements",    label: "Achievements",    icon: <Trophy    className="h-4 w-4" /> },
                 ]}
                 activeTab={activeTab}
                 onChange={setActiveTab}
@@ -451,6 +455,198 @@ export function ProfilePage() {
                   <Button variant="outline" className="w-full rounded-xl py-6 border-dashed border-white/10 hover:border-primary/30 hover:bg-primary/5 transition-all">
                     <Plus className="h-5 w-5 mr-2" />
                     Add New Experience
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* ── RECOMMENDATIONS ── */}
+              {activeTab === "recommendations" && (
+                <motion.div
+                  key="recommendations"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-5"
+                >
+                  {[
+                    {
+                      name: "Rajesh Khanna",
+                      role: "Casting Director · Dharma Productions",
+                      photo: "https://randomuser.me/api/portraits/men/52.jpg",
+                      text: "An exceptionally dedicated performer who brings unmatched depth and authenticity to every character. His preparation and commitment on set truly sets him apart from the rest.",
+                      date: "March 2025",
+                      rating: 5,
+                    },
+                    {
+                      name: "Priya Mehta",
+                      role: "Director · Netflix India",
+                      photo: "https://randomuser.me/api/portraits/women/44.jpg",
+                      text: "Working with him was a pleasure. He consistently delivered take after take with fresh energy and emotion, adapting effortlessly to creative direction. A true professional.",
+                      date: "January 2025",
+                      rating: 5,
+                    },
+                    {
+                      name: "Arjun Kapoor",
+                      role: "Co-star · Mumbai Diaries S2",
+                      photo: "https://randomuser.me/api/portraits/men/34.jpg",
+                      text: "His screen presence is magnetic and he elevates everyone around him. One of the most generous actors I've had the chance to work with — always in character, always present.",
+                      date: "November 2024",
+                      rating: 4,
+                    },
+                  ].map((rec, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                    >
+                      <Card variant="outline" className="p-5 space-y-4 hover:border-primary/30 transition-all group">
+                        {/* Quote icon */}
+                        <div className="flex items-start justify-between gap-3">
+                          <Quote className="h-8 w-8 text-primary/30 shrink-0 mt-0.5" />
+                          {/* Star rating */}
+                          <div className="flex gap-0.5">
+                            {Array.from({ length: 5 }).map((_, j) => (
+                              <Star
+                                key={j}
+                                className={`h-3.5 w-3.5 ${j < rec.rating ? "text-amber-400 fill-amber-400" : "text-white/15"}`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-white/70 leading-relaxed italic">"{rec.text}"</p>
+
+                        {/* Recommender info */}
+                        <div className="flex items-center gap-3 pt-2 border-t border-white/5">
+                          <img
+                            src={rec.photo}
+                            alt={rec.name}
+                            className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold truncate">{rec.name}</p>
+                            <p className="text-xs text-white/40 truncate">{rec.role}</p>
+                          </div>
+                          <span className="text-[10px] text-white/25 shrink-0">{rec.date}</span>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-xl py-6 border-dashed border-white/10 hover:border-primary/30 hover:bg-primary/5 transition-all"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    Request a Recommendation
+                  </Button>
+                </motion.div>
+              )}
+
+              {/* ── ACHIEVEMENTS ── */}
+              {activeTab === "achievements" && (
+                <motion.div
+                  key="achievements"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-5"
+                >
+                  {[
+                    {
+                      icon: <Trophy className="h-6 w-6" />,
+                      color: "#f59e0b",
+                      title: "Best Actor — Filmfare Awards",
+                      org: "Filmfare",
+                      year: "2025",
+                      desc: "Awarded for outstanding performance as the lead in 'The Great Indian Mystery' on Netflix India.",
+                      type: "Award",
+                    },
+                    {
+                      icon: <Medal className="h-6 w-6" />,
+                      color: "#8b5cf6",
+                      title: "Rising Star of the Year",
+                      org: "IIFA Awards",
+                      year: "2024",
+                      desc: "Recognised among the top emerging talents in the Indian film industry at the IIFA ceremony.",
+                      type: "Recognition",
+                    },
+                    {
+                      icon: <Star className="h-6 w-6" />,
+                      color: "#0D9488",
+                      title: "Critics' Choice — Best Supporting",
+                      org: "Screen Awards",
+                      year: "2024",
+                      desc: "Critical acclaim for the emotionally charged supporting role in 'Mumbai Diaries Season 2'.",
+                      type: "Award",
+                    },
+                    {
+                      icon: <CheckCircle2 className="h-6 w-6" />,
+                      color: "#3b82f6",
+                      title: "Completed Method Acting Masterclass",
+                      org: "Lee Strasberg Institute",
+                      year: "2023",
+                      desc: "Completed an intensive 6-month method acting certification under internationally acclaimed faculty.",
+                      type: "Certification",
+                    },
+                    {
+                      icon: <Zap className="h-6 w-6" />,
+                      color: "#e11d48",
+                      title: "Pan-India Box Office — ₹200 Cr Film",
+                      org: "Trade Analytics",
+                      year: "2023",
+                      desc: "Featured in a ₹200 Cr+ grossing film, marking a significant milestone in commercial cinema.",
+                      type: "Milestone",
+                    },
+                  ].map((ach, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.07 }}
+                    >
+                      <Card
+                        variant="outline"
+                        className="flex items-start gap-4 p-5 group hover:border-primary/30 transition-all"
+                      >
+                        {/* Icon badge */}
+                        <div
+                          className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
+                          style={{ background: ach.color + "22", color: ach.color }}
+                        >
+                          {ach.icon}
+                        </div>
+
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-start justify-between gap-2 flex-wrap">
+                            <h4 className="font-bold text-sm group-hover:text-primary transition-colors leading-snug">
+                              {ach.title}
+                            </h4>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <Badge
+                                className="text-[9px] px-2 py-0.5 border"
+                                style={{ background: ach.color + "18", color: ach.color, borderColor: ach.color + "35" }}
+                              >
+                                {ach.type}
+                              </Badge>
+                              <span className="text-[10px] text-white/30">{ach.year}</span>
+                            </div>
+                          </div>
+                          <p className="text-[11px] text-primary/70 font-medium">{ach.org}</p>
+                          <p className="text-xs text-white/45 leading-relaxed">{ach.desc}</p>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-xl py-6 border-dashed border-white/10 hover:border-primary/30 hover:bg-primary/5 transition-all"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    Add Achievement
                   </Button>
                 </motion.div>
               )}
