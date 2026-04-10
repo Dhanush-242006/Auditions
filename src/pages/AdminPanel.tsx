@@ -188,6 +188,26 @@ export function AdminPanel() {
   );
   const [expandedUserId, setExpandedUserId] = React.useState<string | null>(null);
 
+  /* ── Add Moderator modal ── */
+  const [showModModal, setShowModModal] = React.useState(false);
+  const [modForm, setModForm] = React.useState({ name: "", email: "", role: "Moderator", permissions: ["users", "auditions"] });
+  const [modSuccess, setModSuccess] = React.useState(false);
+  const ALL_PERMS = [
+    { id: "users",         label: "Manage Users" },
+    { id: "auditions",     label: "Manage Auditions" },
+    { id: "verifications", label: "Manage Verifications" },
+    { id: "reports",       label: "Manage Reports" },
+    { id: "analytics",     label: "View Analytics" },
+    { id: "settings",      label: "Modify Settings" },
+  ];
+  const togglePerm = (id: string) =>
+    setModForm(f => ({ ...f, permissions: f.permissions.includes(id) ? f.permissions.filter(p => p !== id) : [...f.permissions, id] }));
+  const submitModerator = (e: React.FormEvent) => {
+    e.preventDefault();
+    setModSuccess(true);
+    setTimeout(() => { setModSuccess(false); setShowModModal(false); setModForm({ name: "", email: "", role: "Moderator", permissions: ["users", "auditions"] }); }, 1800);
+  };
+
   const TABS = [
     { id: "overview",      label: "Overview",      icon: <BarChart3 className="h-4 w-4" /> },
     { id: "users",         label: "Users",         icon: <Users className="h-4 w-4" /> },
@@ -267,7 +287,7 @@ export function AdminPanel() {
             <h1 className="text-3xl font-bold font-display">Admin <span className="text-primary">Control Center</span></h1>
             <p className="text-white/50 text-sm mt-1">Monitor platform health, manage users, auditions and verifications.</p>
           </div>
-          <Button size="sm" className="rounded-xl gap-1.5 shadow-lg shadow-primary/20">
+          <Button size="sm" onClick={() => setShowModModal(true)} className="rounded-xl gap-1.5 shadow-lg shadow-primary/20">
             <UserPlus className="h-4 w-4" /> Add Moderator
           </Button>
         </header>
@@ -909,6 +929,107 @@ export function AdminPanel() {
 
         </AnimatePresence>
       </main>
+
+      {/* ── Add Moderator Modal ── */}
+      <AnimatePresence>
+        {showModModal && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={e => { if (e.target === e.currentTarget) setShowModModal(false); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-neutral-900 border border-white/[0.08] rounded-2xl p-6 w-full max-w-md shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <UserPlus className="h-5 w-5 text-primary" />
+                  <h2 className="font-bold text-lg">Add Moderator</h2>
+                </div>
+                <button onClick={() => setShowModModal(false)} className="text-white/40 hover:text-white transition-colors">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {modSuccess ? (
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center gap-3 py-8 text-center">
+                  <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+                  <p className="font-semibold text-lg">Moderator Added!</p>
+                  <p className="text-white/40 text-sm">An invite has been sent to <span className="text-white/70">{modForm.email}</span></p>
+                </motion.div>
+              ) : (
+                <form onSubmit={submitModerator} className="space-y-4">
+                  {/* Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-white/50 uppercase tracking-wider">Full Name</label>
+                    <input
+                      required value={modForm.name} onChange={e => setModForm(f => ({ ...f, name: e.target.value }))}
+                      placeholder="e.g. Rahul Verma"
+                      className="w-full bg-white/[0.05] border border-white/10 text-white placeholder-white/25 rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+                    />
+                  </div>
+                  {/* Email */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-white/50 uppercase tracking-wider">Email Address</label>
+                    <input
+                      required type="email" value={modForm.email} onChange={e => setModForm(f => ({ ...f, email: e.target.value }))}
+                      placeholder="moderator@auditionsadda.com"
+                      className="w-full bg-white/[0.05] border border-white/10 text-white placeholder-white/25 rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+                    />
+                  </div>
+                  {/* Role */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-white/50 uppercase tracking-wider">Role</label>
+                    <select
+                      value={modForm.role} onChange={e => setModForm(f => ({ ...f, role: e.target.value }))}
+                      className="w-full bg-neutral-800 border border-white/10 text-white rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-primary/50 transition-all"
+                    >
+                      <option value="Moderator">Moderator</option>
+                      <option value="Super Moderator">Super Moderator</option>
+                      <option value="Content Reviewer">Content Reviewer</option>
+                    </select>
+                  </div>
+                  {/* Permissions */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-medium text-white/50 uppercase tracking-wider">Permissions</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {ALL_PERMS.map(p => (
+                        <label key={p.id} className={cn(
+                          "flex items-center gap-2 px-3 py-2 rounded-xl border cursor-pointer transition-all text-sm",
+                          modForm.permissions.includes(p.id)
+                            ? "bg-primary/10 border-primary/40 text-white"
+                            : "bg-white/[0.03] border-white/8 text-white/50 hover:border-white/20"
+                        )}>
+                          <input type="checkbox" className="hidden" checked={modForm.permissions.includes(p.id)} onChange={() => togglePerm(p.id)} />
+                          <div className={cn("w-3.5 h-3.5 rounded flex items-center justify-center border shrink-0",
+                            modForm.permissions.includes(p.id) ? "bg-primary border-primary" : "border-white/20"
+                          )}>
+                            {modForm.permissions.includes(p.id) && <CheckCircle2 className="h-3 w-3 text-white" />}
+                          </div>
+                          {p.label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Actions */}
+                  <div className="flex gap-3 pt-2">
+                    <button type="button" onClick={() => setShowModModal(false)}
+                      className="flex-1 py-2.5 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 text-sm transition-all">
+                      Cancel
+                    </button>
+                    <button type="submit"
+                      className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                      <UserPlus className="h-4 w-4" /> Send Invite
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
