@@ -10,6 +10,7 @@ import { CastingDirectorDashboard } from "./pages/CastingDirectorDashboard";
 import { ProfilePage } from "./pages/ProfilePage";
 import { VirtualAuditionPage } from "./pages/VirtualAuditionPage";
 import { AdminPanel } from "./pages/AdminPanel";
+import { AdminLoginPage } from "./pages/AdminLoginPage";
 import { LoginPage } from "./pages/LoginPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { PostAuditionPage } from "./pages/PostAuditionPage";
@@ -64,7 +65,6 @@ const APP_SHELL_PATHS = new Set([
   "/my-projects",
   "/analytics",
   "/director-profile",
-  "/admin",
   "/virtual-audition",
   "/talent-flow",
 ]);
@@ -129,6 +129,7 @@ export default function App() {
         <Route path="/regional" element={<RegionalPage />} />
         <Route path="/team-collab" element={<TeamCollaborationPage />} />
         <Route path="/virtual-audition" element={<VirtualAuditionPage />} />
+        <Route path="/admin-login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
         <Route path="/talent-flow" element={<TalentFlowPage />} />

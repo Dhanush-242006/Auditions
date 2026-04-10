@@ -16,10 +16,9 @@ import {
 import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
 import { Card } from "@/src/components/ui/Card";
-import { Sidebar } from "@/src/components/ui/Sidebar";
-import { BackButton } from "@/src/components/ui/BackButton";
 import { Input } from "@/src/components/ui/Input";
 import { cn } from "@/src/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 /* ── Palette ── */
 const C = { teal: "#0D9488", violet: "#8b5cf6", emerald: "#10b981", amber: "#f59e0b", rose: "#e11d48", blue: "#3b82f6" };
@@ -154,6 +153,20 @@ function StatCard({ label, value, icon, trend, up, sub }: {
    MAIN COMPONENT
 ═══════════════════════════════════════════════ */
 export function AdminPanel() {
+  const navigate = useNavigate();
+
+  /* ── Auth guard ── */
+  React.useEffect(() => {
+    if (localStorage.getItem("adminAuth") !== "true") {
+      navigate("/admin-login", { replace: true });
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminAuth");
+    navigate("/admin-login", { replace: true });
+  };
+
   const [activeTab, setActiveTab] = React.useState("overview");
   const [userSearch, setUserSearch] = React.useState("");
   const [userRoleFilter, setUserRoleFilter] = React.useState("All");
@@ -221,29 +234,42 @@ export function AdminPanel() {
     setFeatureFlags(prev => prev.map(f => f.id === id ? { ...f, enabled: !f.enabled } : f));
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex overflow-x-hidden">
-      <Sidebar />
+    <div className="min-h-screen bg-neutral-950 text-white overflow-x-hidden">
 
-      <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden p-4 md:p-8 space-y-6">
-        <BackButton />
+      {/* Top navbar */}
+      <nav className="sticky top-0 z-40 bg-neutral-950/90 backdrop-blur-md border-b border-white/[0.06] px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm">A</div>
+          <span className="font-bold text-sm tracking-wide">Auditions Adda</span>
+          <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-[10px] font-semibold uppercase tracking-wider">Admin</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
+            <RefreshCw className="h-3.5 w-3.5" /> Refresh
+          </Button>
+          <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
+            <Download className="h-3.5 w-3.5" /> Export
+          </Button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all border border-white/10"
+          >
+            <X className="h-3.5 w-3.5" /> Logout
+          </button>
+        </div>
+      </nav>
+
+      <main className="min-w-0 overflow-x-hidden p-4 md:p-8 space-y-6">
 
         {/* Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-2">
           <div>
             <h1 className="text-3xl font-bold font-display">Admin <span className="text-primary">Control Center</span></h1>
             <p className="text-white/50 text-sm mt-1">Monitor platform health, manage users, auditions and verifications.</p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
-              <RefreshCw className="h-3.5 w-3.5" /> Refresh
-            </Button>
-            <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
-              <Download className="h-3.5 w-3.5" /> Export
-            </Button>
-            <Button size="sm" className="rounded-xl gap-1.5 shadow-lg shadow-primary/20">
-              <UserPlus className="h-4 w-4" /> Add Moderator
-            </Button>
-          </div>
+          <Button size="sm" className="rounded-xl gap-1.5 shadow-lg shadow-primary/20">
+            <UserPlus className="h-4 w-4" /> Add Moderator
+          </Button>
         </header>
 
         {/* Stat Cards */}
