@@ -1,34 +1,17 @@
 import * as React from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
-  Users,
-  ShieldCheck,
-  AlertTriangle,
-  BarChart3,
-  Settings,
-  Search,
-  Filter,
-  MoreVertical,
-  CheckCircle2,
-  XCircle,
-  Flag,
-  TrendingUp,
-  ArrowUpRight,
-  ArrowDownRight,
-  UserPlus,
-  FileCheck
+  Users, ShieldCheck, AlertTriangle, BarChart3, Settings, Search,
+  Filter, MoreVertical, CheckCircle2, XCircle, Flag, TrendingUp,
+  ArrowUpRight, ArrowDownRight, UserPlus, FileCheck, Film, Eye,
+  Briefcase, Bell, Star, Trash2, Ban, Edit3, Download, RefreshCw,
+  ToggleLeft, ToggleRight, Mail, Globe, Lock, Zap, Award, Calendar,
+  MessageSquare, Activity, DollarSign, Target, PieChart as PieChartIcon,
+  ChevronDown, ChevronUp, X,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, Legend,
 } from "recharts";
 import { Button } from "@/src/components/ui/Button";
 import { Badge } from "@/src/components/ui/Badge";
@@ -38,220 +21,867 @@ import { BackButton } from "@/src/components/ui/BackButton";
 import { Input } from "@/src/components/ui/Input";
 import { cn } from "@/src/lib/utils";
 
-const USER_DATA = [
+/* ── Palette ── */
+const C = { teal: "#0D9488", violet: "#8b5cf6", emerald: "#10b981", amber: "#f59e0b", rose: "#e11d48", blue: "#3b82f6" };
+
+/* ── Mock data ── */
+const GROWTH_DATA = [
+  { month: "Oct", actors: 38000, directors: 3800, revenue: 8200000 },
+  { month: "Nov", actors: 40500, directors: 4100, revenue: 9100000 },
+  { month: "Dec", actors: 42000, directors: 4400, revenue: 9800000 },
+  { month: "Jan", actors: 43500, directors: 4600, revenue: 10500000 },
+  { month: "Feb", actors: 44800, directors: 4800, revenue: 11200000 },
+  { month: "Mar", actors: 45000, directors: 5000, revenue: 12400000 },
+];
+
+const ACTIVITY_DATA = [
+  { day: "Mon", auditions: 45, applications: 320, views: 1200 },
+  { day: "Tue", auditions: 52, applications: 410, views: 1580 },
+  { day: "Wed", auditions: 38, applications: 280, views: 980 },
+  { day: "Thu", auditions: 61, applications: 490, views: 1820 },
+  { day: "Fri", auditions: 74, applications: 620, views: 2340 },
+  { day: "Sat", auditions: 55, applications: 440, views: 1650 },
+  { day: "Sun", auditions: 32, applications: 210, views: 870 },
+];
+
+const USER_PIE = [
   { name: "Actors", value: 45000 },
   { name: "Directors", value: 5000 },
   { name: "Admins", value: 120 },
 ];
+const PIE_COLORS = [C.teal, C.violet, C.emerald];
 
-const COLORS = ["#0D9488", "#8b5cf6", "#10b981"];
+const USERS = [
+  { id: "u1", name: "Priya Sharma",  email: "priya@email.com",  role: "Actor",    joined: "Jan 2025", status: "Active",   verified: true,  auditions: 12, rating: 4.8 },
+  { id: "u2", name: "Arjun Mehta",   email: "arjun@email.com",  role: "Actor",    joined: "Feb 2025", status: "Active",   verified: true,  auditions: 8,  rating: 4.6 },
+  { id: "u3", name: "Karan Johar",   email: "karan@email.com",  role: "Director", joined: "Nov 2024", status: "Active",   verified: true,  auditions: 34, rating: 4.9 },
+  { id: "u4", name: "Ranbir Kapoor", email: "ranbir@email.com", role: "Actor",    joined: "Mar 2025", status: "Pending",  verified: false, auditions: 2,  rating: 0 },
+  { id: "u5", name: "Alia Bhatt",    email: "alia@email.com",   role: "Actor",    joined: "Mar 2025", status: "Pending",  verified: false, auditions: 0,  rating: 0 },
+  { id: "u6", name: "Zoya Akhtar",   email: "zoya@email.com",   role: "Director", joined: "Dec 2024", status: "Active",   verified: true,  auditions: 18, rating: 4.7 },
+  { id: "u7", name: "Vikram Singh",  email: "vikram@email.com", role: "Actor",    joined: "Jan 2025", status: "Suspended",verified: false, auditions: 5,  rating: 3.2 },
+  { id: "u8", name: "Kavya Nair",    email: "kavya@email.com",  role: "Actor",    joined: "Feb 2025", status: "Active",   verified: true,  auditions: 9,  rating: 4.5 },
+];
 
+const AUDITIONS_DATA = [
+  { id: "a1", title: "Lead Actor - Period Drama",       company: "Excel Entertainment",    category: "Feature Film", location: "Mumbai",    applicants: 124, views: 1200, status: "Active",   posted: "2h ago",  deadline: "Mar 15" },
+  { id: "a2", title: "Supporting Actress - TV Commercial", company: "Ogilvy & Mather",    category: "Commercial",   location: "Bangalore", applicants: 450, views: 3500, status: "Active",   posted: "5h ago",  deadline: "Mar 10" },
+  { id: "a3", title: "Voice Over Artist - Animation",   company: "Disney India",           category: "Voice Over",   location: "Remote",    applicants: 89,  views: 800,  status: "Active",   posted: "1d ago",  deadline: "Mar 20" },
+  { id: "a4", title: "Child Actor - Short Film",        company: "Independent Production", category: "Short Film",   location: "Delhi",     applicants: 34,  views: 450,  status: "Review",   posted: "2d ago",  deadline: "Mar 12" },
+  { id: "a5", title: "Dancer - Music Video",            company: "T-Series",               category: "Music Video",  location: "Mumbai",    applicants: 230, views: 2100, status: "Active",   posted: "3d ago",  deadline: "Mar 18" },
+  { id: "a6", title: "Lead Actress - Web Series",       company: "Amazon Prime Video",     category: "Web Series",   location: "Hyderabad", applicants: 156, views: 1800, status: "Closed",   posted: "4d ago",  deadline: "Mar 5"  },
+];
+
+const VERIFICATIONS = [
+  { id: "v1", name: "Ranbir Kapoor", type: "Actor",    step: "Identity Verification", submitted: "2h ago",  docs: "Aadhaar Card",         status: "Pending"  },
+  { id: "v2", name: "Karan Johar",   type: "Director", step: "Professional Check",   submitted: "5h ago",  docs: "IFTDA Membership",     status: "Reviewing"},
+  { id: "v3", name: "Alia Bhatt",    type: "Actor",    step: "Selfie Check",          submitted: "1d ago",  docs: "Selfie Photo",         status: "Pending"  },
+  { id: "v4", name: "Zoya Akhtar",   type: "Director", step: "Portfolio Review",      submitted: "2d ago",  docs: "Showreel + Portfolio", status: "Pending"  },
+  { id: "v5", name: "Vikram Singh",  type: "Actor",    step: "Identity Verification", submitted: "3d ago",  docs: "PAN Card",             status: "Reviewing"},
+  { id: "v6", name: "Kavya Nair",    type: "Actor",    step: "Professional Check",    submitted: "4d ago",  docs: "Union Certificate",    status: "Pending"  },
+];
+
+const REPORTS = [
+  { id: "r1", content: "Fake Casting Call: Lead Role",      contentId: "#CC-8241", reportedBy: "User #9241", reason: "Fraudulent Listing",  severity: "High",   date: "2h ago",  type: "Audition" },
+  { id: "r2", content: "Profile: Explicit Content",         contentId: "#PR-3312", reportedBy: "User #4892", reason: "Inappropriate Content",severity: "High",   date: "4h ago",  type: "Profile"  },
+  { id: "r3", content: "Comment: Harassment",               contentId: "#CM-5521", reportedBy: "User #7731", reason: "Harassment/Abuse",    severity: "Medium", date: "6h ago",  type: "Comment"  },
+  { id: "r4", content: "Audition: Misleading Pay Info",     contentId: "#CC-9102", reportedBy: "User #2214", reason: "Misleading Info",     severity: "Medium", date: "1d ago",  type: "Audition" },
+  { id: "r5", content: "Portfolio: Copyright Violation",    contentId: "#PF-6612", reportedBy: "User #8843", reason: "Copyright Infringement",severity:"Low",    date: "2d ago",  type: "Portfolio"},
+];
+
+const ACTIVITY_LOG = [
+  { action: "User Verified",       detail: "Priya Sharma — Identity confirmed",  time: "2m ago",  icon: <ShieldCheck className="h-3.5 w-3.5" />, color: C.emerald },
+  { action: "Audition Posted",     detail: "Excel Ent. — Lead Actor Period Drama",time: "8m ago",  icon: <Film className="h-3.5 w-3.5" />,        color: C.teal    },
+  { action: "Report Resolved",     detail: "#CC-8210 marked as safe",            time: "22m ago", icon: <CheckCircle2 className="h-3.5 w-3.5" />,  color: C.violet  },
+  { action: "New Director",        detail: "Sanjay Gupta joined as Director",    time: "1h ago",  icon: <UserPlus className="h-3.5 w-3.5" />,      color: C.blue    },
+  { action: "Audition Closed",     detail: "Lead Actress Web Series — expired",  time: "2h ago",  icon: <XCircle className="h-3.5 w-3.5" />,       color: C.amber   },
+  { action: "Revenue Milestone",   detail: "₹12.4M MRR achieved",               time: "3h ago",  icon: <DollarSign className="h-3.5 w-3.5" />,    color: C.emerald },
+];
+
+const FEATURE_FLAGS = [
+  { id: "ff1", name: "AI Casting Assistant",    desc: "GPT-powered casting recommendations",  enabled: true  },
+  { id: "ff2", name: "Virtual Auditions",        desc: "Live video audition streaming",         enabled: true  },
+  { id: "ff3", name: "Self-Tape Studio",         desc: "In-browser recording tool",             enabled: true  },
+  { id: "ff4", name: "Regional Listings",        desc: "Language & region-specific auditions",  enabled: true  },
+  { id: "ff5", name: "Talent Flow Analytics",    desc: "Actor journey visualisation",           enabled: false },
+  { id: "ff6", name: "Email Digest",             desc: "Weekly email summaries to users",       enabled: true  },
+  { id: "ff7", name: "Pay-per-Post for Directors","desc": "Charge directors per audition post", enabled: false },
+  { id: "ff8", name: "Push Notifications",       desc: "Browser push notification support",     enabled: true  },
+];
+
+/* ── Helpers ── */
+const severityBadge = (s: string) => {
+  if (s === "High")   return <Badge className="text-[10px] bg-rose-500/10 text-rose-400 border-rose-500/20">High</Badge>;
+  if (s === "Medium") return <Badge className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20">Medium</Badge>;
+  return <Badge className="text-[10px] bg-blue-500/10 text-blue-400 border-blue-500/20">Low</Badge>;
+};
+const statusBadge = (s: string) => {
+  if (s === "Active")    return <Badge className="text-[10px] bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Active</Badge>;
+  if (s === "Pending")   return <Badge className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20">Pending</Badge>;
+  if (s === "Reviewing") return <Badge className="text-[10px] bg-blue-500/10 text-blue-400 border-blue-500/20">Reviewing</Badge>;
+  if (s === "Suspended") return <Badge className="text-[10px] bg-rose-500/10 text-rose-400 border-rose-500/20">Suspended</Badge>;
+  if (s === "Closed")    return <Badge className="text-[10px] bg-white/10 text-white/40 border-white/10">Closed</Badge>;
+  if (s === "Review")    return <Badge className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20">Under Review</Badge>;
+  return <Badge className="text-[10px] bg-white/10 text-white/40 border-white/10">{s}</Badge>;
+};
+
+/* ── Stat Card ── */
+function StatCard({ label, value, icon, trend, up, sub }: {
+  label: string; value: string; icon: React.ReactNode;
+  trend: string; up: boolean; sub?: string;
+}) {
+  return (
+    <Card variant="outline" className="p-5 space-y-3 hover:border-white/20 transition-all group">
+      <div className="flex items-center justify-between">
+        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+          {icon}
+        </div>
+        <div className={cn("flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full",
+          up ? "bg-emerald-500/10 text-emerald-400" : "bg-rose-500/10 text-rose-400")}>
+          {up ? <ArrowUpRight className="h-3 w-3 mr-0.5" /> : <ArrowDownRight className="h-3 w-3 mr-0.5" />}
+          {trend}
+        </div>
+      </div>
+      <div>
+        <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold">{label}</p>
+        <h3 className="text-2xl font-bold mt-0.5">{value}</h3>
+        {sub && <p className="text-[10px] text-white/30 mt-0.5">{sub}</p>}
+      </div>
+    </Card>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN COMPONENT
+═══════════════════════════════════════════════ */
 export function AdminPanel() {
-  const stats = [
-    { label: "Total Users", value: "50.1K", icon: <Users className="h-5 w-5 text-primary" />, trend: "+2.4%", up: true },
-    { label: "Pending Verification", value: "842", icon: <ShieldCheck className="h-5 w-5 text-blue-500" />, trend: "+15 today", up: true },
-    { label: "Reported Content", value: "12", icon: <AlertTriangle className="h-5 w-5 text-rose-500" />, trend: "-5% vs yesterday", up: false },
-    { label: "Platform Revenue", value: "₹12.4M", icon: <BarChart3 className="h-5 w-5 text-emerald-500" />, trend: "+8.2%", up: true },
+  const [activeTab, setActiveTab] = React.useState("overview");
+  const [userSearch, setUserSearch] = React.useState("");
+  const [userRoleFilter, setUserRoleFilter] = React.useState("All");
+  const [auditionSearch, setAuditionSearch] = React.useState("");
+  const [reportSearch, setReportSearch] = React.useState("");
+  const [verificationSearch, setVerificationSearch] = React.useState("");
+  const [featureFlags, setFeatureFlags] = React.useState(FEATURE_FLAGS);
+  const [userStatuses, setUserStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(USERS.map(u => [u.id, u.status]))
+  );
+  const [verificationStatuses, setVerificationStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(VERIFICATIONS.map(v => [v.id, v.status]))
+  );
+  const [auditionStatuses, setAuditionStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(AUDITIONS_DATA.map(a => [a.id, a.status]))
+  );
+  const [reportStatuses, setReportStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(REPORTS.map(r => [r.id, "Open"]))
+  );
+  const [expandedUserId, setExpandedUserId] = React.useState<string | null>(null);
+
+  const TABS = [
+    { id: "overview",      label: "Overview",      icon: <BarChart3 className="h-4 w-4" /> },
+    { id: "users",         label: "Users",         icon: <Users className="h-4 w-4" /> },
+    { id: "auditions",     label: "Auditions",     icon: <Film className="h-4 w-4" /> },
+    { id: "verifications", label: "Verifications", icon: <ShieldCheck className="h-4 w-4" /> },
+    { id: "reports",       label: "Reports",       icon: <Flag className="h-4 w-4" /> },
+    { id: "analytics",     label: "Analytics",     icon: <TrendingUp className="h-4 w-4" /> },
+    { id: "settings",      label: "Settings",      icon: <Settings className="h-4 w-4" /> },
   ];
 
-  const pendingVerifications = [
-    { id: "1", name: "Ranbir Kapoor", type: "Actor", submitted: "2h ago", status: "Pending" },
-    { id: "2", name: "Karan Johar", type: "Director", submitted: "5h ago", status: "Reviewing" },
-    { id: "3", name: "Alia Bhatt", type: "Actor", submitted: "1d ago", status: "Pending" },
-    { id: "4", name: "Zoya Akhtar", type: "Director", submitted: "2d ago", status: "Pending" },
+  const stats = [
+    { label: "Total Users",          value: "50.1K",  icon: <Users className="h-5 w-5 text-primary" />,        trend: "+2.4%",        up: true,  sub: "45K actors · 5K directors" },
+    { label: "Active Auditions",     value: "284",    icon: <Film className="h-5 w-5 text-violet-400" />,       trend: "+12 today",    up: true,  sub: "Across 18 categories" },
+    { label: "Total Applications",   value: "18.6K",  icon: <Briefcase className="h-5 w-5 text-blue-400" />,   trend: "+340 today",   up: true,  sub: "From 45K+ talent pool" },
+    { label: "Pending Verification", value: "842",    icon: <ShieldCheck className="h-5 w-5 text-amber-400" />, trend: "+15 today",    up: true,  sub: "Avg. review 24–48h" },
+    { label: "Reported Content",     value: "12",     icon: <AlertTriangle className="h-5 w-5 text-rose-400" />,trend: "-5 resolved",  up: true,  sub: "5 High · 5 Medium · 2 Low" },
+    { label: "Platform Revenue",     value: "₹12.4M", icon: <DollarSign className="h-5 w-5 text-emerald-400" />,trend: "+8.2% MoM",   up: true,  sub: "This month" },
   ];
+
+  /* Filtered data */
+  const filteredUsers = USERS.filter(u => {
+    const matchSearch = u.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+                        u.email.toLowerCase().includes(userSearch.toLowerCase());
+    const matchRole = userRoleFilter === "All" || u.role === userRoleFilter;
+    return matchSearch && matchRole;
+  });
+
+  const filteredAuditions = AUDITIONS_DATA.filter(a =>
+    a.title.toLowerCase().includes(auditionSearch.toLowerCase()) ||
+    a.company.toLowerCase().includes(auditionSearch.toLowerCase())
+  );
+
+  const filteredVerifications = VERIFICATIONS.filter(v =>
+    v.name.toLowerCase().includes(verificationSearch.toLowerCase()) ||
+    v.step.toLowerCase().includes(verificationSearch.toLowerCase())
+  );
+
+  const filteredReports = REPORTS.filter(r =>
+    r.content.toLowerCase().includes(reportSearch.toLowerCase()) ||
+    r.reason.toLowerCase().includes(reportSearch.toLowerCase())
+  );
+
+  const toggleFlag = (id: string) =>
+    setFeatureFlags(prev => prev.map(f => f.id === id ? { ...f, enabled: !f.enabled } : f));
 
   return (
     <div className="min-h-screen bg-neutral-950 flex overflow-x-hidden">
       <Sidebar />
 
-      <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden p-6 md:p-10 space-y-10">
-        <div className="flex items-center">
-          <BackButton />
-        </div>
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-1">
+      <main className="flex-grow md:ml-64 min-w-0 overflow-x-hidden p-4 md:p-8 space-y-6">
+        <BackButton />
+
+        {/* Header */}
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
             <h1 className="text-3xl font-bold font-display">Admin <span className="text-primary">Control Center</span></h1>
-            <p className="text-white/50 text-sm">Monitor platform health, manage users, and handle verifications.</p>
+            <p className="text-white/50 text-sm mt-1">Monitor platform health, manage users, auditions and verifications.</p>
           </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" className="rounded-xl">
-              <Settings className="mr-2 h-4 w-4" />
-              System Config
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
+              <RefreshCw className="h-3.5 w-3.5" /> Refresh
             </Button>
-            <Button className="rounded-xl shadow-lg shadow-primary/20">
-              <UserPlus className="mr-2 h-5 w-5" />
-              Add Moderator
+            <Button variant="outline" size="sm" className="rounded-xl gap-1.5">
+              <Download className="h-3.5 w-3.5" /> Export
+            </Button>
+            <Button size="sm" className="rounded-xl gap-1.5 shadow-lg shadow-primary/20">
+              <UserPlus className="h-4 w-4" /> Add Moderator
             </Button>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, i) => (
-            <Card key={i} variant="outline" className="p-6 space-y-4 hover:border-white/20 transition-all group">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                  {stat.icon}
-                </div>
-                <div className={cn(
-                  "flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full",
-                  stat.up ? "bg-emerald-500/10 text-emerald-500" : "bg-rose-500/10 text-rose-500"
-                )}>
-                  {stat.up ? <ArrowUpRight className="h-3 w-3 mr-1" /> : <ArrowDownRight className="h-3 w-3 mr-1" />}
-                  {stat.trend}
-                </div>
-              </div>
-              <div>
-                <p className="text-white/40 text-xs uppercase tracking-widest font-bold">{stat.label}</p>
-                <h3 className="text-2xl font-bold">{stat.value}</h3>
-              </div>
-            </Card>
+        {/* Stat Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+          {stats.map((s, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+              <StatCard {...s} />
+            </motion.div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <Card variant="glass" className="lg:col-span-2 p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold flex items-center space-x-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                <span>User Growth & Distribution</span>
-              </h3>
-              <div className="flex items-center space-x-2">
-                <Badge variant="outline" className="text-[10px]">Monthly</Badge>
-                <Badge variant="glass" className="text-[10px] bg-primary text-white border-none">Weekly</Badge>
-              </div>
-            </div>
-            <div className="h-[300px] w-full flex items-center">
-              <div className="w-2/3 h-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={USER_DATA}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                    <XAxis dataKey="name" stroke="#ffffff40" fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis stroke="#ffffff40" fontSize={12} tickLine={false} axisLine={false} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: "12px" }}
-                      itemStyle={{ color: "#fff" }}
-                    />
-                    <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                      {USER_DATA.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="w-1/3 h-full flex flex-col justify-center space-y-6 pl-10">
-                {USER_DATA.map((entry, index) => (
-                  <div key={entry.name} className="space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                      <span className="text-sm font-bold">{entry.name}</span>
-                    </div>
-                    <p className="text-xs text-white/40">{((entry.value / 50120) * 100).toFixed(1)}% of total users</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Card>
+        {/* Tab nav */}
+        <div className="flex items-center gap-1 p-1 bg-white/5 rounded-2xl overflow-x-auto">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+                activeTab === tab.id
+                  ? "bg-primary text-white shadow-lg shadow-primary/20"
+                  : "text-white/50 hover:text-white hover:bg-white/5"
+              )}
+            >
+              {tab.icon}
+              {tab.label}
+              {tab.id === "reports" && (
+                <span className="w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] flex items-center justify-center font-bold">
+                  {Object.values(reportStatuses).filter(s => s === "Open").length}
+                </span>
+              )}
+              {tab.id === "verifications" && (
+                <span className="w-4 h-4 rounded-full bg-amber-500 text-white text-[9px] flex items-center justify-center font-bold">
+                  {Object.values(verificationStatuses).filter(s => s === "Pending").length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
 
-          <Card variant="outline" className="p-6 space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold flex items-center space-x-2">
-                <FileCheck className="h-5 w-5 text-blue-500" />
-                <span>Pending Verification</span>
-              </h3>
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="space-y-4">
-              {pendingVerifications.map((user) => (
-                <div key={user.id} className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between group cursor-pointer hover:border-primary/30 transition-all">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/40">
-                      <Users className="h-5 w-5" />
+        <AnimatePresence mode="wait">
+
+          {/* ══════════ OVERVIEW ══════════ */}
+          {activeTab === "overview" && (
+            <motion.div key="overview" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* User growth chart */}
+                <Card variant="glass" className="lg:col-span-2 p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold flex items-center gap-2"><TrendingUp className="h-4 w-4 text-primary" /> User Growth (6 Months)</h3>
+                    <Badge variant="glass" className="text-[10px]">Monthly</Badge>
+                  </div>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <AreaChart data={GROWTH_DATA}>
+                      <defs>
+                        <linearGradient id="actorGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%"  stopColor={C.teal}   stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={C.teal}   stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="directorGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%"  stopColor={C.violet} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={C.violet} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
+                      <XAxis dataKey="month" stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} />
+                      <Legend wrapperStyle={{ fontSize: 11, color: "#ffffff60" }} />
+                      <Area type="monotone" dataKey="actors"    name="Actors"    stroke={C.teal}   fill="url(#actorGrad)"    strokeWidth={2} />
+                      <Area type="monotone" dataKey="directors" name="Directors" stroke={C.violet} fill="url(#directorGrad)" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* User distribution pie */}
+                <Card variant="outline" className="p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><PieChartIcon className="h-4 w-4 text-primary" /> User Distribution</h3>
+                  <div className="flex justify-center">
+                    <ResponsiveContainer width="100%" height={160}>
+                      <PieChart>
+                        <Pie data={USER_PIE} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value" paddingAngle={3}>
+                          {USER_PIE.map((_, i) => <Cell key={i} fill={PIE_COLORS[i]} />)}
+                        </Pie>
+                        <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="space-y-2">
+                    {USER_PIE.map((e, i) => (
+                      <div key={e.name} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: PIE_COLORS[i] }} />
+                          <span className="text-white/70">{e.name}</span>
+                        </div>
+                        <span className="font-bold">{e.value.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Weekly activity */}
+                <Card variant="glass" className="lg:col-span-2 p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /> Weekly Platform Activity</h3>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={ACTIVITY_DATA}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
+                      <XAxis dataKey="day" stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} />
+                      <Legend wrapperStyle={{ fontSize: 11, color: "#ffffff60" }} />
+                      <Bar dataKey="auditions"    name="Auditions"    fill={C.teal}   radius={[4,4,0,0]} />
+                      <Bar dataKey="applications" name="Applications" fill={C.violet} radius={[4,4,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Activity log */}
+                <Card variant="outline" className="p-5 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Bell className="h-4 w-4 text-primary" /> Recent Activity</h3>
+                  <div className="space-y-3">
+                    {ACTIVITY_LOG.map((log, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                          style={{ background: log.color + "22", color: log.color }}>
+                          {log.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold">{log.action}</p>
+                          <p className="text-[10px] text-white/40 truncate">{log.detail}</p>
+                        </div>
+                        <span className="text-[10px] text-white/25 shrink-0">{log.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              {/* Quick actions */}
+              <Card variant="outline" className="p-5">
+                <h3 className="font-bold mb-4 flex items-center gap-2"><Zap className="h-4 w-4 text-primary" /> Quick Actions</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { label: "Review Verifications", icon: <FileCheck className="h-4 w-4" />, color: C.teal,   tab: "verifications" },
+                    { label: "Resolve Reports",       icon: <Flag className="h-4 w-4" />,      color: C.rose,   tab: "reports"       },
+                    { label: "Manage Users",          icon: <Users className="h-4 w-4" />,     color: C.violet, tab: "users"         },
+                    { label: "View Analytics",        icon: <BarChart3 className="h-4 w-4" />, color: C.blue,   tab: "analytics"     },
+                  ].map((a, i) => (
+                    <button key={i} onClick={() => setActiveTab(a.tab)}
+                      className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 transition-all text-left group">
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                        style={{ background: a.color + "22", color: a.color }}>
+                        {a.icon}
+                      </div>
+                      <span className="text-sm font-medium text-white/70 group-hover:text-white transition-colors">{a.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ USERS ══════════ */}
+          {activeTab === "users" && (
+            <motion.div key="users" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={userSearch} onChange={e => setUserSearch(e.target.value)} placeholder="Search users by name or email..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+                <div className="flex gap-2">
+                  {["All", "Actor", "Director"].map(r => (
+                    <button key={r} onClick={() => setUserRoleFilter(r)}
+                      className={cn("px-4 py-2.5 rounded-xl text-sm font-medium transition-all border",
+                        userRoleFilter === r ? "bg-primary border-primary text-white" : "bg-white/5 border-white/10 text-white/50 hover:text-white")}>
+                      {r}
+                    </button>
+                  ))}
+                </div>
+                <Button variant="outline" size="sm" className="rounded-xl gap-1.5 shrink-0">
+                  <Download className="h-3.5 w-3.5" /> Export CSV
+                </Button>
+              </div>
+
+              <Card variant="outline" className="overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-white/5 border-b border-white/5">
+                      <tr>
+                        {["User", "Role", "Joined", "Auditions", "Rating", "Status", "Verified", "Actions"].map(h => (
+                          <th key={h} className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-white/40">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {filteredUsers.map((u, i) => (
+                        <React.Fragment key={u.id}>
+                          <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
+                            className="hover:bg-white/[0.02] transition-colors group cursor-pointer"
+                            onClick={() => setExpandedUserId(expandedUserId === u.id ? null : u.id)}>
+                            <td className="px-5 py-3.5">
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">
+                                  {u.name[0]}
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold group-hover:text-primary transition-colors">{u.name}</p>
+                                  <p className="text-[10px] text-white/40">{u.email}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-5 py-3.5">
+                              <Badge className={cn("text-[10px]", u.role === "Director"
+                                ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
+                                : "bg-teal-500/10 text-teal-400 border-teal-500/20")}>
+                                {u.role}
+                              </Badge>
+                            </td>
+                            <td className="px-5 py-3.5 text-sm text-white/50">{u.joined}</td>
+                            <td className="px-5 py-3.5 text-sm font-bold">{u.auditions}</td>
+                            <td className="px-5 py-3.5 text-sm">
+                              {u.rating > 0 ? (
+                                <span className="flex items-center gap-1 text-amber-400">
+                                  <Star className="h-3 w-3 fill-amber-400" />{u.rating}
+                                </span>
+                              ) : <span className="text-white/20">—</span>}
+                            </td>
+                            <td className="px-5 py-3.5">{statusBadge(userStatuses[u.id])}</td>
+                            <td className="px-5 py-3.5">
+                              {u.verified
+                                ? <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                                : <XCircle className="h-4 w-4 text-white/20" />}
+                            </td>
+                            <td className="px-5 py-3.5">
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-white/40 hover:text-white" title="View Profile">
+                                  <Eye className="h-3.5 w-3.5" />
+                                </Button>
+                                {userStatuses[u.id] === "Suspended" ? (
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-emerald-400 hover:bg-emerald-500/10"
+                                    title="Restore" onClick={e => { e.stopPropagation(); setUserStatuses(p => ({...p, [u.id]: "Active"})); }}>
+                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                  </Button>
+                                ) : (
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-amber-400 hover:bg-amber-500/10"
+                                    title="Suspend" onClick={e => { e.stopPropagation(); setUserStatuses(p => ({...p, [u.id]: "Suspended"})); }}>
+                                    <Ban className="h-3.5 w-3.5" />
+                                  </Button>
+                                )}
+                                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-rose-400 hover:bg-rose-500/10" title="Remove">
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                                {expandedUserId === u.id ? <ChevronUp className="h-3.5 w-3.5 text-white/30" /> : <ChevronDown className="h-3.5 w-3.5 text-white/30" />}
+                              </div>
+                            </td>
+                          </motion.tr>
+                          {/* Expanded row */}
+                          {expandedUserId === u.id && (
+                            <tr className="bg-white/[0.015]">
+                              <td colSpan={8} className="px-5 py-4">
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                  <div><p className="text-white/40 text-[10px] uppercase tracking-wider">Email</p><p className="font-medium mt-0.5">{u.email}</p></div>
+                                  <div><p className="text-white/40 text-[10px] uppercase tracking-wider">Role</p><p className="font-medium mt-0.5">{u.role}</p></div>
+                                  <div><p className="text-white/40 text-[10px] uppercase tracking-wider">Member Since</p><p className="font-medium mt-0.5">{u.joined}</p></div>
+                                  <div className="flex gap-2">
+                                    <Button size="sm" variant="outline" className="rounded-lg text-xs gap-1.5"><Mail className="h-3 w-3" /> Email User</Button>
+                                    <Button size="sm" variant="outline" className="rounded-lg text-xs gap-1.5"><Edit3 className="h-3 w-3" /> Edit Role</Button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="px-5 py-3 bg-white/[0.02] flex items-center justify-between text-[11px] text-white/30 border-t border-white/5">
+                  <span>Showing {filteredUsers.length} of {USERS.length} users</span>
+                  <Button variant="ghost" size="sm" className="text-xs text-white/40">Load More</Button>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ AUDITIONS ══════════ */}
+          {activeTab === "auditions" && (
+            <motion.div key="auditions" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={auditionSearch} onChange={e => setAuditionSearch(e.target.value)} placeholder="Search auditions or production companies..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+                <Button variant="outline" size="sm" className="rounded-xl gap-1.5 shrink-0"><Filter className="h-3.5 w-3.5" /> Filter</Button>
+              </div>
+
+              <Card variant="outline" className="overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-white/5 border-b border-white/5">
+                      <tr>
+                        {["Title", "Company", "Category", "Location", "Applicants", "Views", "Status", "Deadline", "Actions"].map(h => (
+                          <th key={h} className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-white/40 whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {filteredAuditions.map((a, i) => (
+                        <motion.tr key={a.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
+                          className="hover:bg-white/[0.02] transition-colors group">
+                          <td className="px-5 py-3.5">
+                            <p className="text-sm font-semibold group-hover:text-primary transition-colors max-w-[200px] truncate">{a.title}</p>
+                          </td>
+                          <td className="px-5 py-3.5 text-sm text-white/60 whitespace-nowrap">{a.company}</td>
+                          <td className="px-5 py-3.5">
+                            <Badge variant="glass" className="text-[10px] whitespace-nowrap">{a.category}</Badge>
+                          </td>
+                          <td className="px-5 py-3.5 text-sm text-white/50 whitespace-nowrap">{a.location}</td>
+                          <td className="px-5 py-3.5 text-sm font-bold text-primary">{a.applicants}</td>
+                          <td className="px-5 py-3.5 text-sm text-white/50">{a.views.toLocaleString()}</td>
+                          <td className="px-5 py-3.5">{statusBadge(auditionStatuses[a.id])}</td>
+                          <td className="px-5 py-3.5 text-sm text-white/50 whitespace-nowrap">{a.deadline}</td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-1">
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-emerald-400 hover:bg-emerald-500/10" title="Approve"
+                                onClick={() => setAuditionStatuses(p => ({...p, [a.id]: "Active"}))}>
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-amber-400 hover:bg-amber-500/10" title="Flag for Review"
+                                onClick={() => setAuditionStatuses(p => ({...p, [a.id]: "Review"}))}>
+                                <Flag className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-rose-400 hover:bg-rose-500/10" title="Remove"
+                                onClick={() => setAuditionStatuses(p => ({...p, [a.id]: "Closed"}))}>
+                                <XCircle className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="px-5 py-3 bg-white/[0.02] flex items-center justify-between text-[11px] text-white/30 border-t border-white/5">
+                  <span>Showing {filteredAuditions.length} of {AUDITIONS_DATA.length} auditions</span>
+                  <Button variant="ghost" size="sm" className="text-xs text-white/40">Load More</Button>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ VERIFICATIONS ══════════ */}
+          {activeTab === "verifications" && (
+            <motion.div key="verifications" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              {/* Summary row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: "Identity",    count: 2, color: C.teal   },
+                  { label: "Selfie",      count: 1, color: C.blue   },
+                  { label: "Portfolio",   count: 2, color: C.violet  },
+                  { label: "Professional",count: 1, color: C.amber  },
+                ].map(s => (
+                  <Card key={s.label} variant="outline" className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: s.color + "22", color: s.color }}>
+                      <FileCheck className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold group-hover:text-primary transition-colors">{user.name}</p>
-                      <p className="text-[10px] text-white/40">{user.type} • {user.submitted}</p>
+                      <p className="text-[10px] text-white/40 uppercase tracking-wider">{s.label}</p>
+                      <p className="text-xl font-bold">{s.count} <span className="text-xs text-white/30 font-normal">pending</span></p>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-emerald-500 hover:bg-emerald-500/10">
-                      <CheckCircle2 className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-rose-500 hover:bg-rose-500/10">
-                      <XCircle className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Button variant="outline" className="w-full rounded-xl text-xs">View All Requests</Button>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Moderation Queue</h2>
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
-                <Input placeholder="Search reports..." className="pl-10 h-9 text-xs w-64 rounded-full" />
+                  </Card>
+                ))}
               </div>
-              <Button variant="outline" size="sm" className="rounded-full">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
-            </div>
-          </div>
 
-          <Card variant="outline" className="p-0 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="bg-white/5 border-b border-white/5">
-                  <tr>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40">Reported Content</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40">Reported By</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40">Reason</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40">Severity</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40">Date</th>
-                    <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest text-white/40 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {[1, 2, 3].map((i) => (
-                    <tr key={i} className="hover:bg-white/[0.02] transition-colors group">
-                      <td className="px-6 py-4">
-                        <p className="text-sm font-bold group-hover:text-primary transition-colors">Casting Call: Lead Actor</p>
-                        <p className="text-[10px] text-white/40">ID: #CC-8241</p>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-white/60">User #9241</td>
-                      <td className="px-6 py-4 text-sm text-white/60">Suspicious Activity</td>
-                      <td className="px-6 py-4">
-                        <Badge variant="destructive" className="text-[10px] bg-rose-500/10 text-rose-500 border-none">High</Badge>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-white/60">2h ago</td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-white/40 hover:text-white">
-                            <Flag className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-white/40 hover:text-white">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={verificationSearch} onChange={e => setVerificationSearch(e.target.value)} placeholder="Search by name or verification type..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {filteredVerifications.map((v, i) => (
+                  <motion.div key={v.id} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
+                    <Card variant="outline" className="p-4 flex items-center gap-4 hover:border-white/20 transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 text-primary font-bold">
+                        {v.name[0]}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-semibold text-sm">{v.name}</p>
+                          <Badge className={cn("text-[10px]", v.type === "Director"
+                            ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
+                            : "bg-teal-500/10 text-teal-400 border-teal-500/20")}>
+                            {v.type}
+                          </Badge>
                         </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="p-4 bg-white/[0.02] text-center">
-              <Button variant="ghost" size="sm" className="text-xs text-white/40 hover:text-white">View All Reports</Button>
-            </div>
-          </Card>
-        </div>
+                        <p className="text-xs text-white/50 mt-0.5">{v.step} · <span className="text-primary/70">{v.docs}</span></p>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-[10px] text-white/30">{v.submitted}</span>
+                        {statusBadge(verificationStatuses[v.id])}
+                        <Button size="sm" variant="ghost" className="h-8 w-8 rounded-lg text-emerald-400 hover:bg-emerald-500/10"
+                          onClick={() => setVerificationStatuses(p => ({...p, [v.id]: "Approved"}))}>
+                          <CheckCircle2 className="h-4 w-4" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 rounded-lg text-rose-400 hover:bg-rose-500/10"
+                          onClick={() => setVerificationStatuses(p => ({...p, [v.id]: "Rejected"}))}>
+                          <XCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ══════════ REPORTS ══════════ */}
+          {activeTab === "reports" && (
+            <motion.div key="reports" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={reportSearch} onChange={e => setReportSearch(e.target.value)} placeholder="Search reports by content or reason..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+                <Button variant="outline" size="sm" className="rounded-xl gap-1.5 shrink-0"><Filter className="h-3.5 w-3.5" /> Filter by Severity</Button>
+              </div>
+
+              <Card variant="outline" className="overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-white/5 border-b border-white/5">
+                      <tr>
+                        {["Reported Content", "Type", "Reported By", "Reason", "Severity", "Date", "Status", "Actions"].map(h => (
+                          <th key={h} className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-white/40 whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {filteredReports.map((r, i) => (
+                        <motion.tr key={r.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
+                          className="hover:bg-white/[0.02] transition-colors group">
+                          <td className="px-5 py-3.5">
+                            <p className="text-sm font-semibold group-hover:text-primary transition-colors max-w-[180px] truncate">{r.content}</p>
+                            <p className="text-[10px] text-white/30">{r.contentId}</p>
+                          </td>
+                          <td className="px-5 py-3.5"><Badge variant="glass" className="text-[10px]">{r.type}</Badge></td>
+                          <td className="px-5 py-3.5 text-sm text-white/50">{r.reportedBy}</td>
+                          <td className="px-5 py-3.5 text-sm text-white/60 max-w-[140px] truncate">{r.reason}</td>
+                          <td className="px-5 py-3.5">{severityBadge(r.severity)}</td>
+                          <td className="px-5 py-3.5 text-sm text-white/50 whitespace-nowrap">{r.date}</td>
+                          <td className="px-5 py-3.5">
+                            {reportStatuses[r.id] === "Resolved"
+                              ? <Badge className="text-[10px] bg-emerald-500/10 text-emerald-400 border-emerald-500/20">Resolved</Badge>
+                              : <Badge className="text-[10px] bg-rose-500/10 text-rose-400 border-rose-500/20">Open</Badge>}
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-1">
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-emerald-400 hover:bg-emerald-500/10" title="Resolve"
+                                onClick={() => setReportStatuses(p => ({...p, [r.id]: "Resolved"}))}>
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-amber-400 hover:bg-amber-500/10" title="Flag">
+                                <Flag className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-rose-400 hover:bg-rose-500/10" title="Remove Content">
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="px-5 py-3 bg-white/[0.02] text-[11px] text-white/30 border-t border-white/5">
+                  {Object.values(reportStatuses).filter(s => s === "Resolved").length} of {REPORTS.length} reports resolved
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ ANALYTICS ══════════ */}
+          {activeTab === "analytics" && (
+            <motion.div key="analytics" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Revenue trend */}
+                <Card variant="glass" className="p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><DollarSign className="h-4 w-4 text-emerald-400" /> Revenue Trend (₹)</h3>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <LineChart data={GROWTH_DATA}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
+                      <XAxis dataKey="month" stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} tickFormatter={v => `₹${(v/1000000).toFixed(1)}M`} />
+                      <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} formatter={(v: number) => [`₹${(v/1000000).toFixed(2)}M`, "Revenue"]} />
+                      <Line type="monotone" dataKey="revenue" stroke={C.emerald} strokeWidth={2.5} dot={{ fill: C.emerald, r: 4 }} activeDot={{ r: 6 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Applications per day */}
+                <Card variant="glass" className="p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Target className="h-4 w-4 text-primary" /> Daily Applications & Auditions</h3>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={ACTIVITY_DATA}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
+                      <XAxis dataKey="day" stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} />
+                      <Legend wrapperStyle={{ fontSize: 11, color: "#ffffff60" }} />
+                      <Bar dataKey="applications" name="Applications" fill={C.teal}   radius={[4,4,0,0]} />
+                      <Bar dataKey="auditions"    name="Auditions"    fill={C.violet} radius={[4,4,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Page views */}
+                <Card variant="glass" className="p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Eye className="h-4 w-4 text-blue-400" /> Daily Page Views</h3>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <AreaChart data={ACTIVITY_DATA}>
+                      <defs>
+                        <linearGradient id="viewGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%"  stopColor={C.blue} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={C.blue} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
+                      <XAxis dataKey="day" stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke="#ffffff30" fontSize={11} tickLine={false} axisLine={false} />
+                      <Tooltip contentStyle={{ backgroundColor: "#171717", border: "1px solid #ffffff10", borderRadius: 12 }} itemStyle={{ color: "#fff" }} />
+                      <Area type="monotone" dataKey="views" name="Views" stroke={C.blue} fill="url(#viewGrad)" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Key metrics */}
+                <Card variant="outline" className="p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Award className="h-4 w-4 text-amber-400" /> Platform KPIs</h3>
+                  <div className="space-y-4">
+                    {[
+                      { label: "Avg. Applications per Audition", value: "65", bar: 65, color: C.teal    },
+                      { label: "Profile Completion Rate",         value: "72%",bar: 72, color: C.violet  },
+                      { label: "Verification Approval Rate",      value: "84%",bar: 84, color: C.emerald },
+                      { label: "Director Retention (MoM)",        value: "91%",bar: 91, color: C.amber   },
+                      { label: "AI Assistant Adoption",           value: "58%",bar: 58, color: C.blue    },
+                    ].map(m => (
+                      <div key={m.label} className="space-y-1.5">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-white/60">{m.label}</span>
+                          <span className="font-bold">{m.value}</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all" style={{ width: `${m.bar}%`, background: m.color }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ══════════ SETTINGS ══════════ */}
+          {activeTab === "settings" && (
+            <motion.div key="settings" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Feature flags */}
+                <Card variant="outline" className="p-6 space-y-5">
+                  <h3 className="font-bold flex items-center gap-2"><ToggleRight className="h-4 w-4 text-primary" /> Feature Flags</h3>
+                  <div className="space-y-3">
+                    {featureFlags.map(f => (
+                      <div key={f.id} className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/10 transition-all">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold">{f.name}</p>
+                          <p className="text-[10px] text-white/40 mt-0.5">{f.desc}</p>
+                        </div>
+                        <button onClick={() => toggleFlag(f.id)}
+                          className={cn("shrink-0 w-11 h-6 rounded-full relative transition-colors duration-200",
+                            f.enabled ? "bg-primary" : "bg-white/10")}>
+                          <span className={cn("absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200",
+                            f.enabled ? "translate-x-5" : "translate-x-0.5")} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                {/* System config */}
+                <div className="space-y-4">
+                  <Card variant="outline" className="p-6 space-y-4">
+                    <h3 className="font-bold flex items-center gap-2"><Settings className="h-4 w-4 text-primary" /> System Configuration</h3>
+                    <div className="space-y-3">
+                      {[
+                        { label: "Platform Name",         value: "Auditions Adda", type: "text" },
+                        { label: "Support Email",          value: "support@auditionsadda.com", type: "email" },
+                        { label: "Max Upload Size (MB)",   value: "50", type: "number" },
+                        { label: "Free Auditions / Month", value: "3", type: "number" },
+                      ].map(cfg => (
+                        <div key={cfg.label} className="space-y-1">
+                          <label className="text-[10px] uppercase tracking-wider text-white/40 font-bold">{cfg.label}</label>
+                          <input type={cfg.type} defaultValue={cfg.value}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-primary/50 transition-colors" />
+                        </div>
+                      ))}
+                    </div>
+                    <Button size="sm" className="rounded-xl gap-1.5 mt-2">Save Configuration</Button>
+                  </Card>
+
+                  <Card variant="outline" className="p-6 space-y-4">
+                    <h3 className="font-bold flex items-center gap-2"><Lock className="h-4 w-4 text-rose-400" /> Danger Zone</h3>
+                    <p className="text-xs text-white/40">These actions are irreversible. Proceed with caution.</p>
+                    <div className="space-y-2">
+                      <Button variant="outline" size="sm" className="w-full rounded-xl border-amber-500/30 text-amber-400 hover:bg-amber-500/10 gap-2">
+                        <AlertTriangle className="h-3.5 w-3.5" /> Clear All Notifications
+                      </Button>
+                      <Button variant="outline" size="sm" className="w-full rounded-xl border-rose-500/30 text-rose-400 hover:bg-rose-500/10 gap-2">
+                        <Trash2 className="h-3.5 w-3.5" /> Purge Expired Auditions
+                      </Button>
+                      <Button variant="outline" size="sm" className="w-full rounded-xl border-rose-500/30 text-rose-400 hover:bg-rose-500/10 gap-2">
+                        <Ban className="h-3.5 w-3.5" /> Maintenance Mode
+                      </Button>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
       </main>
     </div>
   );
