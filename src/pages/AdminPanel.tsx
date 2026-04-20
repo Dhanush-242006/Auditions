@@ -7,7 +7,8 @@ import {
   Briefcase, Bell, Star, Trash2, Ban, Edit3, Download, RefreshCw,
   ToggleLeft, ToggleRight, Mail, Globe, Lock, Zap, Award, Calendar,
   MessageSquare, Activity, DollarSign, Target, PieChart as PieChartIcon,
-  ChevronDown, ChevronUp, X,
+  ChevronDown, ChevronUp, X, Send, MapPin, Trophy, Link2, Megaphone,
+  Crown, Layers, CheckCheck, Clock, ExternalLink,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -107,6 +108,39 @@ const FEATURE_FLAGS = [
   { id: "ff8", name: "Push Notifications",       desc: "Browser push notification support",     enabled: true  },
 ];
 
+const APPLICATIONS_DATA = [
+  { id: "ap1", actor: "Priya Sharma",  role: "Actor", audition: "Lead Actor — Period Drama",        company: "Excel Entertainment",    category: "Feature Film", appliedAt: "2h ago",  status: "Applied",  driveLink: "https://drive.google.com/xyz", matchScore: 92 },
+  { id: "ap2", actor: "Arjun Mehta",   role: "Actor", audition: "Supporting Actor — TV Commercial", company: "Ogilvy & Mather",        category: "Commercial",   appliedAt: "4h ago",  status: "Callback", driveLink: "",                             matchScore: 78 },
+  { id: "ap3", actor: "Kavya Nair",    role: "Actor", audition: "Voice Over Artist — Animation",    company: "Disney India",           category: "Voice Over",   appliedAt: "1d ago",  status: "Offer",    driveLink: "https://drive.google.com/abc", matchScore: 88 },
+  { id: "ap4", actor: "Ranbir Kapoor", role: "Actor", audition: "Child Actor — Short Film",         company: "Independent Production", category: "Short Film",   appliedAt: "1d ago",  status: "Applied",  driveLink: "",                             matchScore: 65 },
+  { id: "ap5", actor: "Alia Bhatt",    role: "Actor", audition: "Dancer — Music Video",             company: "T-Series",               category: "Music Video",  appliedAt: "2d ago",  status: "Rejected", driveLink: "https://drive.google.com/def", matchScore: 71 },
+  { id: "ap6", actor: "Vikram Singh",  role: "Actor", audition: "Lead Role — Web Series",           company: "Amazon Prime Video",     category: "Web Series",   appliedAt: "3d ago",  status: "Cast",     driveLink: "https://drive.google.com/ghi", matchScore: 95 },
+];
+
+const INVITATIONS_DATA = [
+  { id: "inv1", director: "Karan Johar",  directorCompany: "Dharma Productions",  actor: "Priya Sharma",  audition: "Lead Role — Bollywood Drama",    sentAt: "3h ago", status: "Accepted", auditionDate: "Mar 20", location: "Mumbai"    },
+  { id: "inv2", director: "Zoya Akhtar",  directorCompany: "Excel Entertainment", actor: "Arjun Mehta",   audition: "Supporting Actor — Web Series",  sentAt: "6h ago", status: "Pending",  auditionDate: "Mar 22", location: "Mumbai"    },
+  { id: "inv3", director: "Karan Johar",  directorCompany: "Dharma Productions",  actor: "Kavya Nair",    audition: "Female Lead — Romance Film",     sentAt: "1d ago", status: "Declined", auditionDate: "Mar 18", location: "Mumbai"    },
+  { id: "inv4", director: "Zoya Akhtar",  directorCompany: "Excel Entertainment", actor: "Alia Bhatt",    audition: "Dancer Role — Music Video",      sentAt: "2d ago", status: "Accepted", auditionDate: "Mar 25", location: "Hyderabad" },
+  { id: "inv5", director: "Raj Kumar",    directorCompany: "Balaji Telefilms",    actor: "Ranbir Kapoor", audition: "Comic Role — TV Series",         sentAt: "3d ago", status: "Pending",  auditionDate: "Mar 28", location: "Delhi"     },
+];
+
+const SKILL_BADGES_DATA = [
+  { id: "sb1", actor: "Priya Sharma",  skill: "Classical Dance",          level: "Expert",       experience: "8 years",  submitted: "1d ago", docs: "Natyashastra Certificate.pdf", status: "Pending",   category: "Dance"   },
+  { id: "sb2", actor: "Arjun Mehta",   skill: "Method Acting",            level: "Advanced",     experience: "5 years",  submitted: "2d ago", docs: "Lee Strasberg Diploma.pdf",   status: "Pending",   category: "Acting"  },
+  { id: "sb3", actor: "Kavya Nair",    skill: "Voice Training",           level: "Intermediate", experience: "3 years",  submitted: "3d ago", docs: "ABRSM Grade 7 Certificate.pdf",status: "Reviewing", category: "Voice"   },
+  { id: "sb4", actor: "Vikram Singh",  skill: "Action & Stunts",          level: "Expert",       experience: "10 years", submitted: "4d ago", docs: "ISA Stunt Certification.pdf",  status: "Approved",  category: "Action"  },
+  { id: "sb5", actor: "Alia Bhatt",    skill: "Hindi Dialogue Delivery",  level: "Advanced",     experience: "4 years",  submitted: "5d ago", docs: "Workshop Completion.pdf",      status: "Pending",   category: "Acting"  },
+  { id: "sb6", actor: "Kavya Nair",    skill: "Bharatanatyam",            level: "Expert",       experience: "12 years", submitted: "6d ago", docs: "Arangetram Certificate.pdf",   status: "Approved",  category: "Dance"   },
+];
+
+const CAMPAIGNS_HISTORY = [
+  { id: "c1", title: "March Casting Drive",             message: "New wave of 50+ auditions across Feature Films and Web Series.",  audience: "Actors",    type: "Info",    sentAt: "Mar 10", openRate: "68%", sent: 45000 },
+  { id: "c2", title: "Director Verification Reminder",  message: "Complete your verification to unlock premium casting features.",  audience: "Directors", type: "Warning", sentAt: "Mar 8",  openRate: "52%", sent: 5000  },
+  { id: "c3", title: "Platform Maintenance Notice",     message: "Scheduled maintenance on Mar 15, 2–4 AM IST.",                   audience: "All",       type: "Warning", sentAt: "Mar 6",  openRate: "81%", sent: 50000 },
+  { id: "c4", title: "New Feature: Self-Tape Studio",   message: "Record and submit self-tapes directly from your browser.",       audience: "Actors",    type: "Info",    sentAt: "Feb 28", openRate: "74%", sent: 45000 },
+];
+
 /* ── Helpers ── */
 const severityBadge = (s: string) => {
   if (s === "High")   return <Badge className="text-[10px] bg-rose-500/10 text-rose-400 border-rose-500/20">High</Badge>;
@@ -188,6 +222,47 @@ export function AdminPanel() {
   );
   const [expandedUserId, setExpandedUserId] = React.useState<string | null>(null);
 
+  /* ── Applications tab ── */
+  const [appSearch, setAppSearch] = React.useState("");
+  const [appStatusFilter, setAppStatusFilter] = React.useState("All");
+  const [applicationStatuses, setApplicationStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(APPLICATIONS_DATA.map(a => [a.id, a.status]))
+  );
+
+  /* ── Invitations tab ── */
+  const [invSearch, setInvSearch] = React.useState("");
+  const [invitationStatuses, setInvitationStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(INVITATIONS_DATA.map(i => [i.id, i.status]))
+  );
+
+  /* ── Skill Badges tab ── */
+  const [badgeSearch, setBadgeSearch] = React.useState("");
+  const [badgeCategoryFilter, setBadgeCategoryFilter] = React.useState("All");
+  const [badgeStatuses, setBadgeStatuses] = React.useState<Record<string, string>>(
+    () => Object.fromEntries(SKILL_BADGES_DATA.map(b => [b.id, b.status]))
+  );
+
+  /* ── Campaigns tab ── */
+  const [campaignForm, setCampaignForm] = React.useState({ title: "", message: "", audience: "All", type: "Info" });
+  const [campaignSent, setCampaignSent] = React.useState(false);
+  const [campaignSending, setCampaignSending] = React.useState(false);
+  const [sentCampaigns, setSentCampaigns] = React.useState(CAMPAIGNS_HISTORY);
+  const submitCampaign = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCampaignSending(true);
+    setTimeout(() => {
+      const audienceCounts: Record<string, number> = { All: 50120, Actors: 45000, Directors: 5000 };
+      setSentCampaigns(prev => [{
+        id: `c${Date.now()}`, title: campaignForm.title, message: campaignForm.message,
+        audience: campaignForm.audience, type: campaignForm.type,
+        sentAt: "Just now", openRate: "—", sent: audienceCounts[campaignForm.audience] ?? 50120,
+      }, ...prev]);
+      setCampaignSent(true);
+      setCampaignSending(false);
+      setTimeout(() => { setCampaignSent(false); setCampaignForm({ title: "", message: "", audience: "All", type: "Info" }); }, 2000);
+    }, 1200);
+  };
+
   /* ── Add Moderator modal ── */
   const [showModModal, setShowModModal] = React.useState(false);
   const [modForm, setModForm] = React.useState({ name: "", email: "", role: "Moderator", permissions: ["users", "auditions"] });
@@ -214,6 +289,10 @@ export function AdminPanel() {
     { id: "auditions",     label: "Auditions",     icon: <Film className="h-4 w-4" /> },
     { id: "verifications", label: "Verifications", icon: <ShieldCheck className="h-4 w-4" /> },
     { id: "reports",       label: "Reports",       icon: <Flag className="h-4 w-4" /> },
+    { id: "applications",  label: "Applications",  icon: <Briefcase className="h-4 w-4" /> },
+    { id: "invitations",   label: "Invitations",   icon: <MessageSquare className="h-4 w-4" /> },
+    { id: "badges",        label: "Skill Badges",  icon: <Trophy className="h-4 w-4" /> },
+    { id: "campaigns",     label: "Campaigns",     icon: <Megaphone className="h-4 w-4" /> },
     { id: "analytics",     label: "Analytics",     icon: <TrendingUp className="h-4 w-4" /> },
     { id: "settings",      label: "Settings",      icon: <Settings className="h-4 w-4" /> },
   ];
@@ -249,6 +328,26 @@ export function AdminPanel() {
     r.content.toLowerCase().includes(reportSearch.toLowerCase()) ||
     r.reason.toLowerCase().includes(reportSearch.toLowerCase())
   );
+
+  const filteredApplications = APPLICATIONS_DATA.filter(a => {
+    const matchSearch = a.actor.toLowerCase().includes(appSearch.toLowerCase()) ||
+                        a.audition.toLowerCase().includes(appSearch.toLowerCase());
+    const matchStatus = appStatusFilter === "All" || applicationStatuses[a.id] === appStatusFilter;
+    return matchSearch && matchStatus;
+  });
+
+  const filteredInvitations = INVITATIONS_DATA.filter(i =>
+    i.director.toLowerCase().includes(invSearch.toLowerCase()) ||
+    i.actor.toLowerCase().includes(invSearch.toLowerCase()) ||
+    i.audition.toLowerCase().includes(invSearch.toLowerCase())
+  );
+
+  const filteredBadges = SKILL_BADGES_DATA.filter(b => {
+    const matchSearch = b.actor.toLowerCase().includes(badgeSearch.toLowerCase()) ||
+                        b.skill.toLowerCase().includes(badgeSearch.toLowerCase());
+    const matchCat = badgeCategoryFilter === "All" || b.category === badgeCategoryFilter;
+    return matchSearch && matchCat;
+  });
 
   const toggleFlag = (id: string) =>
     setFeatureFlags(prev => prev.map(f => f.id === id ? { ...f, enabled: !f.enabled } : f));
@@ -324,6 +423,16 @@ export function AdminPanel() {
               {tab.id === "verifications" && (
                 <span className="w-4 h-4 rounded-full bg-amber-500 text-white text-[9px] flex items-center justify-center font-bold">
                   {Object.values(verificationStatuses).filter(s => s === "Pending").length}
+                </span>
+              )}
+              {tab.id === "badges" && Object.values(badgeStatuses).filter(s => s === "Pending").length > 0 && (
+                <span className="w-4 h-4 rounded-full bg-violet-500 text-white text-[9px] flex items-center justify-center font-bold">
+                  {Object.values(badgeStatuses).filter(s => s === "Pending").length}
+                </span>
+              )}
+              {tab.id === "applications" && Object.values(applicationStatuses).filter(s => s === "Applied").length > 0 && (
+                <span className="w-4 h-4 rounded-full bg-blue-500 text-white text-[9px] flex items-center justify-center font-bold">
+                  {Object.values(applicationStatuses).filter(s => s === "Applied").length}
                 </span>
               )}
             </button>
@@ -433,12 +542,16 @@ export function AdminPanel() {
               {/* Quick actions */}
               <Card variant="outline" className="p-5">
                 <h3 className="font-bold mb-4 flex items-center gap-2"><Zap className="h-4 w-4 text-primary" /> Quick Actions</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
                   {[
-                    { label: "Review Verifications", icon: <FileCheck className="h-4 w-4" />, color: C.teal,   tab: "verifications" },
-                    { label: "Resolve Reports",       icon: <Flag className="h-4 w-4" />,      color: C.rose,   tab: "reports"       },
-                    { label: "Manage Users",          icon: <Users className="h-4 w-4" />,     color: C.violet, tab: "users"         },
-                    { label: "View Analytics",        icon: <BarChart3 className="h-4 w-4" />, color: C.blue,   tab: "analytics"     },
+                    { label: "Review Verifications", icon: <FileCheck className="h-4 w-4" />, color: C.teal,    tab: "verifications" },
+                    { label: "Resolve Reports",       icon: <Flag className="h-4 w-4" />,      color: C.rose,    tab: "reports"       },
+                    { label: "Manage Users",          icon: <Users className="h-4 w-4" />,     color: C.violet,  tab: "users"         },
+                    { label: "Applications",          icon: <Briefcase className="h-4 w-4" />, color: C.blue,    tab: "applications"  },
+                    { label: "Skill Badges",          icon: <Trophy className="h-4 w-4" />,    color: C.amber,   tab: "badges"        },
+                    { label: "Send Campaign",         icon: <Megaphone className="h-4 w-4" />, color: C.emerald, tab: "campaigns"     },
+                    { label: "Invitations",           icon: <Send className="h-4 w-4" />,      color: C.violet,  tab: "invitations"   },
+                    { label: "View Analytics",        icon: <BarChart3 className="h-4 w-4" />, color: C.teal,    tab: "analytics"     },
                   ].map((a, i) => (
                     <button key={i} onClick={() => setActiveTab(a.tab)}
                       className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 transition-all text-left group">
@@ -777,6 +890,347 @@ export function AdminPanel() {
                   {Object.values(reportStatuses).filter(s => s === "Resolved").length} of {REPORTS.length} reports resolved
                 </div>
               </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ APPLICATIONS ══════════ */}
+          {activeTab === "applications" && (
+            <motion.div key="applications" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              {/* Summary chips */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                {["All", "Applied", "Callback", "Offer", "Cast"].map(s => {
+                  const cnt = s === "All" ? APPLICATIONS_DATA.length : APPLICATIONS_DATA.filter(a => a.status === s).length;
+                  const colors: Record<string, string> = { All: C.teal, Applied: C.blue, Callback: C.amber, Offer: C.violet, Cast: C.emerald };
+                  return (
+                    <button key={s} onClick={() => setAppStatusFilter(s)}
+                      className={cn("p-3 rounded-xl border text-left transition-all",
+                        appStatusFilter === s ? "border-white/30 bg-white/10" : "border-white/8 bg-white/[0.03] hover:border-white/20")}>
+                      <p className="text-[10px] uppercase tracking-wider font-bold" style={{ color: colors[s] }}>{s}</p>
+                      <p className="text-xl font-bold mt-0.5">{cnt}</p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={appSearch} onChange={e => setAppSearch(e.target.value)} placeholder="Search by actor name or audition title..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+                <Button variant="outline" size="sm" className="rounded-xl gap-1.5 shrink-0"><Download className="h-3.5 w-3.5" /> Export</Button>
+              </div>
+
+              <Card variant="outline" className="overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-white/5 border-b border-white/5">
+                      <tr>{["Actor", "Audition", "Category", "Applied", "Match", "Drive Link", "Status", "Actions"].map(h => (
+                        <th key={h} className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-white/40 whitespace-nowrap">{h}</th>
+                      ))}</tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {filteredApplications.map((a, i) => (
+                        <motion.tr key={a.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
+                          className="hover:bg-white/[0.02] transition-colors group">
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center text-primary font-bold text-xs shrink-0">{a.actor[0]}</div>
+                              <p className="text-sm font-semibold group-hover:text-primary transition-colors">{a.actor}</p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <p className="text-sm font-medium max-w-[200px] truncate">{a.audition}</p>
+                            <p className="text-[10px] text-white/40">{a.company}</p>
+                          </td>
+                          <td className="px-5 py-3.5"><Badge variant="glass" className="text-[10px] whitespace-nowrap">{a.category}</Badge></td>
+                          <td className="px-5 py-3.5 text-sm text-white/50 whitespace-nowrap">{a.appliedAt}</td>
+                          <td className="px-5 py-3.5">
+                            <span className={cn("text-sm font-bold", a.matchScore >= 85 ? "text-emerald-400" : a.matchScore >= 70 ? "text-amber-400" : "text-white/50")}>
+                              {a.matchScore}%
+                            </span>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            {a.driveLink
+                              ? <a href={a.driveLink} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()}
+                                  className="flex items-center gap-1 text-primary text-xs hover:underline">
+                                  <Link2 className="h-3 w-3" /> View
+                                </a>
+                              : <span className="text-white/20 text-xs">—</span>}
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <select value={applicationStatuses[a.id]}
+                              onChange={e => setApplicationStatuses(p => ({...p, [a.id]: e.target.value}))}
+                              className="bg-neutral-800 border border-white/10 text-white rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-primary/50">
+                              {["Applied","Callback","Offer","Cast","Rejected"].map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-lg text-white/40 hover:text-white" title="View Profile">
+                              <Eye className="h-3.5 w-3.5" />
+                            </Button>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="px-5 py-3 bg-white/[0.02] flex items-center justify-between text-[11px] text-white/30 border-t border-white/5">
+                  <span>Showing {filteredApplications.length} of {APPLICATIONS_DATA.length} applications</span>
+                  <span className="text-primary/70">{APPLICATIONS_DATA.filter(a => a.driveLink).length} have Drive links attached</span>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* ══════════ INVITATIONS ══════════ */}
+          {activeTab === "invitations" && (
+            <motion.div key="invitations" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { label: "Total Sent",  value: INVITATIONS_DATA.length, color: C.teal,    icon: <Send className="h-4 w-4" />        },
+                  { label: "Accepted",    value: INVITATIONS_DATA.filter(i => i.status === "Accepted").length,  color: C.emerald, icon: <CheckCheck className="h-4 w-4" /> },
+                  { label: "Pending",     value: INVITATIONS_DATA.filter(i => i.status === "Pending").length,   color: C.amber,   icon: <Clock className="h-4 w-4" />      },
+                ].map(s => (
+                  <Card key={s.label} variant="outline" className="p-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: s.color + "22", color: s.color }}>{s.icon}</div>
+                    <div>
+                      <p className="text-[10px] text-white/40 uppercase tracking-wider">{s.label}</p>
+                      <p className="text-2xl font-bold">{s.value}</p>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                <input value={invSearch} onChange={e => setInvSearch(e.target.value)} placeholder="Search by director, actor or audition..."
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+              </div>
+
+              <div className="space-y-3">
+                {filteredInvitations.map((inv, i) => (
+                  <motion.div key={inv.id} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
+                    <Card variant="outline" className="p-4 hover:border-white/20 transition-all">
+                      <div className="flex items-start gap-4 flex-wrap">
+                        {/* Director */}
+                        <div className="flex items-center gap-2.5 min-w-[180px]">
+                          <div className="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400 font-bold text-sm shrink-0">{inv.director[0]}</div>
+                          <div>
+                            <p className="text-sm font-semibold">{inv.director}</p>
+                            <p className="text-[10px] text-white/40">{inv.directorCompany}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-white/30 shrink-0 mt-2"><Send className="h-3.5 w-3.5" /></div>
+                        {/* Actor */}
+                        <div className="flex items-center gap-2.5 min-w-[140px]">
+                          <div className="w-10 h-10 rounded-xl bg-teal-500/15 flex items-center justify-center text-teal-400 font-bold text-sm shrink-0">{inv.actor[0]}</div>
+                          <div>
+                            <p className="text-sm font-semibold">{inv.actor}</p>
+                            <p className="text-[10px] text-white/40">Actor</p>
+                          </div>
+                        </div>
+                        {/* Audition info */}
+                        <div className="flex-1 min-w-[200px]">
+                          <p className="text-sm font-medium text-white/80 truncate">{inv.audition}</p>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-[10px] text-white/40 flex items-center gap-1"><Calendar className="h-3 w-3" />{inv.auditionDate}</span>
+                            <span className="text-[10px] text-white/40 flex items-center gap-1"><MapPin className="h-3 w-3" />{inv.location}</span>
+                            <span className="text-[10px] text-white/30">{inv.sentAt}</span>
+                          </div>
+                        </div>
+                        {/* Status + actions */}
+                        <div className="flex items-center gap-3 shrink-0">
+                          <Badge className={cn("text-[10px]",
+                            invitationStatuses[inv.id] === "Accepted" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
+                            invitationStatuses[inv.id] === "Declined" ? "bg-rose-500/10 text-rose-400 border-rose-500/20"    :
+                                                                         "bg-amber-500/10 text-amber-400 border-amber-500/20")}>
+                            {invitationStatuses[inv.id]}
+                          </Badge>
+                          <Button size="sm" variant="ghost" className="h-7 w-7 rounded-lg text-rose-400 hover:bg-rose-500/10" title="Withdraw"
+                            onClick={() => setInvitationStatuses(p => ({...p, [inv.id]: "Withdrawn"}))}>
+                            <XCircle className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ══════════ SKILL BADGES ══════════ */}
+          {activeTab === "badges" && (
+            <motion.div key="badges" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+              {/* Category summary */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["All", "Acting", "Dance", "Voice", "Action"].map(cat => {
+                  const cnt = cat === "All" ? SKILL_BADGES_DATA.length : SKILL_BADGES_DATA.filter(b => b.category === cat).length;
+                  const pendingCnt = cat === "All"
+                    ? SKILL_BADGES_DATA.filter(b => b.status === "Pending").length
+                    : SKILL_BADGES_DATA.filter(b => b.category === cat && b.status === "Pending").length;
+                  return (
+                    <button key={cat} onClick={() => setBadgeCategoryFilter(cat)}
+                      className={cn("p-3 rounded-xl border text-left transition-all",
+                        badgeCategoryFilter === cat ? "border-violet-500/40 bg-violet-500/10" : "border-white/8 bg-white/[0.03] hover:border-white/20")}>
+                      <p className="text-xs font-bold text-white/60">{cat}</p>
+                      <p className="text-xl font-bold mt-0.5">{cnt} <span className="text-[11px] text-white/30 font-normal">total</span></p>
+                      {pendingCnt > 0 && <p className="text-[10px] text-amber-400 mt-0.5">{pendingCnt} pending</p>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                  <input value={badgeSearch} onChange={e => setBadgeSearch(e.target.value)} placeholder="Search by actor name or skill..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-primary/50" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {filteredBadges.map((b, i) => (
+                  <motion.div key={b.id} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
+                    <Card variant="outline" className="p-4 flex items-center gap-4 hover:border-white/20 transition-all flex-wrap">
+                      {/* Actor avatar */}
+                      <div className="w-11 h-11 rounded-xl bg-violet-500/15 flex items-center justify-center text-violet-400 font-bold shrink-0">{b.actor[0]}</div>
+                      {/* Info */}
+                      <div className="flex-1 min-w-[200px]">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="text-sm font-semibold">{b.actor}</p>
+                          <Badge className="text-[10px] bg-violet-500/10 text-violet-400 border-violet-500/20">{b.category}</Badge>
+                        </div>
+                        <div className="flex items-center gap-3 mt-1 flex-wrap">
+                          <span className="flex items-center gap-1 text-xs text-white/70"><Trophy className="h-3 w-3 text-amber-400" />{b.skill}</span>
+                          <span className="text-[10px] text-white/40">{b.level} · {b.experience}</span>
+                        </div>
+                      </div>
+                      {/* Docs */}
+                      <div className="flex items-center gap-1.5 text-xs text-primary/70 min-w-[160px]">
+                        <ExternalLink className="h-3 w-3 shrink-0" />
+                        <span className="truncate max-w-[140px]">{b.docs}</span>
+                      </div>
+                      {/* Time + status + actions */}
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-[10px] text-white/30">{b.submitted}</span>
+                        {statusBadge(badgeStatuses[b.id])}
+                        {badgeStatuses[b.id] !== "Approved" && (
+                          <Button size="sm" variant="ghost" className="h-8 w-8 rounded-lg text-emerald-400 hover:bg-emerald-500/10"
+                            title="Approve" onClick={() => setBadgeStatuses(p => ({...p, [b.id]: "Approved"}))}>
+                            <CheckCircle2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {badgeStatuses[b.id] !== "Rejected" && (
+                          <Button size="sm" variant="ghost" className="h-8 w-8 rounded-lg text-rose-400 hover:bg-rose-500/10"
+                            title="Reject" onClick={() => setBadgeStatuses(p => ({...p, [b.id]: "Rejected"}))}>
+                            <XCircle className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ══════════ CAMPAIGNS ══════════ */}
+          {activeTab === "campaigns" && (
+            <motion.div key="campaigns" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                {/* Compose */}
+                <Card variant="outline" className="lg:col-span-2 p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Megaphone className="h-4 w-4 text-primary" /> New Campaign</h3>
+                  {campaignSent ? (
+                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                      className="flex flex-col items-center gap-3 py-10 text-center">
+                      <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+                      <p className="font-semibold text-lg">Campaign Sent!</p>
+                      <p className="text-white/40 text-sm">Delivered to {campaignForm.audience === "All" ? "50,120" : campaignForm.audience === "Actors" ? "45,000" : "5,000"} users</p>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={submitCampaign} className="space-y-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Title</label>
+                        <input required value={campaignForm.title} onChange={e => setCampaignForm(f => ({...f, title: e.target.value}))}
+                          placeholder="e.g. March Casting Drive"
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-primary/50" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Message</label>
+                        <textarea required rows={4} value={campaignForm.message} onChange={e => setCampaignForm(f => ({...f, message: e.target.value}))}
+                          placeholder="Write your announcement message..."
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-primary/50 resize-none" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Audience</label>
+                          <select value={campaignForm.audience} onChange={e => setCampaignForm(f => ({...f, audience: e.target.value}))}
+                            className="w-full bg-neutral-800 border border-white/10 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary/50">
+                            <option>All</option>
+                            <option>Actors</option>
+                            <option>Directors</option>
+                          </select>
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] uppercase tracking-wider text-white/40 font-bold">Type</label>
+                          <select value={campaignForm.type} onChange={e => setCampaignForm(f => ({...f, type: e.target.value}))}
+                            className="w-full bg-neutral-800 border border-white/10 text-white rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary/50">
+                            <option>Info</option>
+                            <option>Warning</option>
+                            <option>Success</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="pt-1 p-3 rounded-xl bg-white/[0.03] border border-white/5 text-xs text-white/40">
+                        <p>Reach: <span className="text-white font-semibold">
+                          {campaignForm.audience === "All" ? "50,120" : campaignForm.audience === "Actors" ? "45,000" : "5,000"} users
+                        </span></p>
+                      </div>
+                      <button type="submit" disabled={campaignSending}
+                        className="w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-60 text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20">
+                        {campaignSending
+                          ? <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> Sending…</>
+                          : <><Send className="h-4 w-4" /> Send Campaign</>}
+                      </button>
+                    </form>
+                  )}
+                </Card>
+
+                {/* History */}
+                <Card variant="outline" className="lg:col-span-3 p-6 space-y-4">
+                  <h3 className="font-bold flex items-center gap-2"><Layers className="h-4 w-4 text-primary" /> Campaign History</h3>
+                  <div className="space-y-3">
+                    {sentCampaigns.map((c, i) => (
+                      <motion.div key={c.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                        <div className="p-4 rounded-xl border border-white/8 bg-white/[0.02] hover:border-white/15 transition-all space-y-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <p className="text-sm font-semibold">{c.title}</p>
+                                <Badge className={cn("text-[10px]",
+                                  c.type === "Warning" ? "bg-amber-500/10 text-amber-400 border-amber-500/20" :
+                                  c.type === "Success" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" :
+                                                         "bg-blue-500/10 text-blue-400 border-blue-500/20")}>{c.type}</Badge>
+                                <Badge variant="glass" className="text-[10px]">{c.audience}</Badge>
+                              </div>
+                              <p className="text-xs text-white/40 mt-1 line-clamp-1">{c.message}</p>
+                            </div>
+                            <span className="text-[10px] text-white/25 shrink-0">{c.sentAt}</span>
+                          </div>
+                          <div className="flex items-center gap-4 text-[11px] text-white/40">
+                            <span><span className="text-white font-medium">{c.sent.toLocaleString()}</span> sent</span>
+                            <span>Open rate: <span className="text-primary font-medium">{c.openRate}</span></span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
             </motion.div>
           )}
 
